@@ -1,0 +1,1210 @@
+<title>Espectro: Diagnóstico e Intervenção no TEA</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: palco fixo 1920×1080 escalado para caber na tela do projetor; contornos grossos em tinta + sombras sólidas + formas do espectro que se reorganizam a cada slide. Tema único e claro, escolhido para projeção em sala iluminada. */
+:root{
+  --paper:#F3F4FA;      /* fundo frio, claro, lê bem no projetor */
+  --white:#FFFFFF;
+  --ink:#1D1A3F;        /* tinta: texto e contornos */
+  --ink-soft:#4C4870;
+  --line:#D6D8EA;
+  --coral:#FF6A5C;
+  --sun:#FFBE2E;
+  --leaf:#22B97F;
+  --sky:#3B93FF;
+  --grape:#8A6BFF;
+  --display:"Fredoka","Baloo 2","Trebuchet MS",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",Verdana,system-ui,sans-serif;
+  --c:var(--coral); --on-c:var(--ink);
+  color-scheme:light;
+}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);overflow:hidden}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+:focus-visible{outline:4px solid var(--sky);outline-offset:4px}
+
+.viewport{position:fixed;inset:0;padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:var(--paper)}
+.stage-wrap{position:relative;width:100%;height:100%}
+.stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%) scale(.5);transform-origin:center;overflow:hidden;background:var(--paper);border-radius:6px}
+
+/* ---------- fundo lúdico ---------- */
+.bg{position:absolute;inset:0;pointer-events:none;z-index:0}
+.shape{position:absolute;left:0;top:0;will-change:transform}
+.shape .fl{width:100%;height:100%}
+.shape svg{width:100%;height:100%;display:block;overflow:visible}
+
+/* ---------- slides ---------- */
+.slide{position:absolute;inset:0;z-index:1;padding:96px 150px 120px;display:flex;flex-direction:column;gap:34px;visibility:hidden}
+.slide.active{visibility:visible}
+.slide[data-c="coral"]{--c:var(--coral);--on-c:var(--ink)}
+.slide[data-c="sun"]{--c:var(--sun);--on-c:var(--ink)}
+.slide[data-c="leaf"]{--c:var(--leaf);--on-c:var(--ink)}
+.slide[data-c="sky"]{--c:var(--sky);--on-c:var(--ink)}
+.slide[data-c="grape"]{--c:var(--grape);--on-c:var(--white)}
+
+.eyebrow{align-self:flex-start;display:inline-flex;align-items:center;gap:14px;font-family:var(--display);font-weight:600;font-size:26px;letter-spacing:.06em;text-transform:uppercase;background:var(--c);color:var(--on-c);border:3px solid var(--ink);border-radius:999px;padding:8px 24px 8px 10px;box-shadow:4px 4px 0 var(--ink)}
+.eyebrow .num{background:var(--white);color:var(--ink);border:3px solid var(--ink);border-radius:999px;padding:0 14px;letter-spacing:0;font-size:24px}
+.eyebrow.solo{padding:8px 24px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;color:var(--ink)}
+h1{font-size:94px;font-weight:600;line-height:1.02;letter-spacing:-.01em}
+h2{font-size:76px;font-weight:600;line-height:1.04;letter-spacing:-.01em}
+h3{font-size:40px;font-weight:600;line-height:1.1}
+p{margin:0}
+.lead{font-size:38px;line-height:1.32;color:var(--ink-soft);max-width:30ch}
+.body{font-size:31px;line-height:1.38;color:var(--ink)}
+.small{font-size:24px;line-height:1.35;color:var(--ink-soft)}
+.src{font-family:var(--display);font-weight:500;font-size:22px;color:var(--ink-soft);letter-spacing:.02em}
+.w{display:inline-block;will-change:transform}
+.hl .w{background:linear-gradient(transparent 60%,var(--hl,var(--sun)) 60%,var(--hl,var(--sun)) 92%,transparent 92%);padding:0 .04em}
+strong{font-weight:700;color:var(--ink)}
+
+.row{display:flex;gap:56px;align-items:center;min-height:0;flex:1}
+.col{display:flex;flex-direction:column;gap:30px;min-width:0}
+.grow1{flex:1}
+.head{display:flex;flex-direction:column;gap:22px}
+
+.card{background:var(--white);border:3px solid var(--ink);border-radius:30px;box-shadow:8px 8px 0 var(--ink);padding:30px 34px}
+.chip{display:inline-flex;align-items:center;gap:12px;font-family:var(--display);font-weight:500;font-size:30px;background:var(--white);border:3px solid var(--ink);border-radius:999px;padding:12px 26px;box-shadow:5px 5px 0 var(--ink);line-height:1.15}
+.chip.f{background:var(--k,var(--c));color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:18px 18px}
+.k-coral{--k:var(--coral)} .k-sun{--k:var(--sun)} .k-leaf{--k:var(--leaf)} .k-sky{--k:var(--sky)} .k-grape{--k:var(--grape)}
+.dot{width:18px;height:18px;border-radius:50%;background:var(--k,var(--c));border:3px solid var(--ink);flex:none}
+.sticker{background:var(--sun);border:3px solid var(--ink);border-radius:26px;box-shadow:8px 8px 0 var(--ink);padding:26px 34px;font-family:var(--display);font-weight:500;font-size:36px;line-height:1.2;transform:rotate(-1.5deg)}
+.sticker.k{background:var(--k)}
+.callout{display:flex;gap:24px;align-items:flex-start;background:var(--white);border:3px solid var(--ink);border-radius:30px;box-shadow:8px 8px 0 var(--c);padding:28px 34px;font-size:32px;line-height:1.35}
+.callout .ic{flex:none;width:64px;height:64px;border-radius:50%;background:var(--c);border:3px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:38px;color:var(--on-c)}
+
+/* ---------- espaços de imagem ---------- */
+.slot{position:relative;margin:0;width:100%;aspect-ratio:var(--r,1);max-width:100%;flex:none}
+.slot::before{content:"";position:absolute;inset:0;background:var(--c);border:3px solid var(--ink);border-radius:58% 42% 47% 53% / 44% 56% 44% 56%;transform:rotate(-7deg) translate(22px,16px)}
+.slot .frame{position:absolute;inset:0;border-radius:44% 56% 52% 48% / 52% 44% 56% 48%;overflow:hidden;background:var(--white);border:4px dashed var(--ink-soft)}
+.slot.has-img .frame{border:3px solid var(--ink)}
+.slot img{width:100%;height:100%;object-fit:cover;display:none;max-width:none}
+.slot.has-img img{display:block}
+.slot.has-img .ph{display:none}
+.slot.art .frame{border:3px solid var(--ink);background:var(--white)}
+.scene{width:100%;height:100%;display:block}
+.slot.drag .frame{outline:8px solid var(--sky);outline-offset:6px}
+.ph{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;text-align:center;gap:10px;padding:16%}
+.ph b{font-family:var(--display);font-weight:600;font-size:48px;background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:2px 18px}
+.ph span{font-size:24px;line-height:1.3;color:var(--ink-soft)}
+
+/* ---------- capa ---------- */
+.s-cover{padding-top:84px}
+.cover-grid{display:grid;grid-template-columns:1fr 600px;gap:70px;align-items:center;flex:1;min-height:0}
+.cover-text{display:flex;flex-direction:column;gap:30px;min-width:0}
+.cover-text h1{--hl:var(--sun)}
+.cover-text .lead{font-size:40px;max-width:26ch;color:var(--ink)}
+.authors{display:flex;flex-direction:column;gap:14px}
+.authors ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px 12px}
+.authors li{font-family:var(--display);font-weight:500;font-size:24px;background:var(--white);border:2.5px solid var(--ink);border-radius:999px;padding:6px 18px}
+.cover-art{position:relative}
+.cover-art .inf{position:absolute;width:260px;right:-70px;top:-50px;z-index:2;filter:drop-shadow(5px 5px 0 var(--ink))}
+
+/* ---------- roteiro ---------- */
+.route{position:relative;width:1620px;height:560px;flex:none}
+.route svg{position:absolute;inset:0}
+.stop{position:absolute;width:340px;transform:translate(-50%,-44px);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+.stop .b{width:88px;height:88px;border-radius:50%;background:var(--k);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);display:grid;place-items:center;font-family:var(--display);font-weight:600;font-size:32px}
+.stop span{font-family:var(--display);font-weight:500;font-size:28px;line-height:1.15}
+
+/* ---------- espectro ---------- */
+.big-word{font-family:var(--display);font-weight:700;font-size:210px;line-height:.9;letter-spacing:-.02em;display:flex;gap:4px;-webkit-text-stroke:5px var(--ink);paint-order:stroke fill;text-shadow:9px 9px 0 var(--ink)}
+.big-word span{display:inline-block}
+.domains{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.domains .card{display:flex;gap:24px;align-items:flex-start}
+.letter{flex:none;width:76px;height:76px;border-radius:22px;border:3px solid var(--ink);background:var(--k);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:42px}
+
+/* ---------- critérios ---------- */
+.checks{display:flex;flex-direction:column;gap:22px}
+.check{display:flex;gap:26px;align-items:center;font-size:34px;line-height:1.3}
+.check svg{flex:none;width:72px;height:72px}
+.check small{display:block;font-size:25px;color:var(--ink-soft)}
+.banner{display:flex;align-items:center;gap:34px;background:var(--ink);color:var(--white);border-radius:34px;padding:30px 44px;box-shadow:10px 10px 0 var(--c)}
+.banner h3{color:var(--white);font-size:52px}
+.banner p{font-size:28px;color:#D9D7F0;margin-top:8px}
+.banner .no{flex:none;width:110px;height:110px;border-radius:50%;background:var(--c);display:grid;place-items:center;border:3px solid var(--white)}
+
+/* ---------- comunicação ---------- */
+.bubbles{display:flex;flex-wrap:wrap;gap:26px 24px}
+.bubble{position:relative;background:var(--white);border:3px solid var(--ink);border-radius:34px;padding:16px 28px;font-family:var(--display);font-weight:500;font-size:30px;box-shadow:5px 5px 0 var(--ink)}
+.bubble::after{content:"";position:absolute;left:34px;bottom:-15px;width:24px;height:24px;background:inherit;border-right:3px solid var(--ink);border-bottom:3px solid var(--ink);transform:rotate(45deg) skew(10deg,10deg)}
+.bubble:nth-child(even)::after{left:auto;right:34px}
+.bubble.f{background:var(--k)}
+
+/* ---------- padrões ---------- */
+.pills{display:flex;flex-direction:column;gap:20px}
+.pill{display:flex;align-items:center;gap:20px;align-self:flex-start;background:var(--k);border:3px solid var(--ink);border-radius:999px;padding:16px 32px 16px 18px;box-shadow:6px 6px 0 var(--ink);font-family:var(--display);font-weight:500;font-size:32px}
+.pill:nth-child(2){margin-left:60px}.pill:nth-child(3){margin-left:120px}.pill:nth-child(4){margin-left:60px}
+.loop{width:46px;height:46px;flex:none;border-radius:50%;background:var(--white);border:3px solid var(--ink);position:relative}
+.loop i{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--ink);top:4px;left:14px}
+
+/* ---------- sensorial ---------- */
+.senses{display:grid;grid-template-columns:repeat(3,200px);gap:26px 40px}
+.sense{all:unset;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:12px}
+.sense .ring{width:176px;height:176px;border-radius:50%;background:var(--k);border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);display:grid;place-items:center}
+.sense svg{width:96px;height:96px}
+.sense span{font-family:var(--display);font-weight:600;font-size:30px}
+.sense:focus-visible .ring{outline:4px solid var(--sky);outline-offset:6px}
+.hh{display:flex;gap:22px}
+.hh .chip b{font-weight:700}
+
+/* ---------- rastreio ≠ diagnóstico ---------- */
+.neq{display:flex;align-items:center;justify-content:center;gap:40px}
+.neq .big{font-family:var(--display);font-weight:600;font-size:74px;padding:22px 54px;border:4px solid var(--ink);border-radius:999px;box-shadow:9px 9px 0 var(--ink)}
+.neq svg{width:150px;height:150px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.pair .card{font-size:33px;line-height:1.3;display:flex;gap:22px;align-items:center}
+.pm{flex:none;width:78px;height:78px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:54px;background:var(--k)}
+
+/* ---------- fontes (hub) ---------- */
+.hub{position:relative;width:1620px;height:580px;flex:none}
+.hub svg{position:absolute;inset:0}
+.hub .center{position:absolute;left:810px;top:260px;width:290px;height:290px;transform:translate(-50%,-50%);border-radius:50%;background:var(--c);border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);display:grid;place-items:center;text-align:center;padding:30px;font-family:var(--display);font-weight:600;font-size:34px;line-height:1.12}
+.hub .sat{position:absolute;width:470px;transform:translate(-50%,-50%);padding:24px 28px}
+.hub .sat h3{font-size:34px;display:flex;align-items:center;gap:14px}
+.hub .sat p{font-size:25px;line-height:1.3;color:var(--ink-soft);margin-top:8px}
+.hub .sticker{position:absolute;left:810px;top:500px;transform:translate(-50%,0) rotate(-2deg);width:560px;text-align:center;font-size:31px;padding:20px 26px}
+
+/* ---------- instrumentos ---------- */
+.flips{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.flip{all:unset;cursor:pointer;display:block;height:200px;perspective:1400px}
+.flip .inner{position:relative;width:100%;height:100%;transition:transform .7s cubic-bezier(.3,1.4,.5,1);transform-style:preserve-3d}
+.flip.on .inner{transform:rotateY(180deg)}
+.flip .face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:3px solid var(--ink);border-radius:28px;box-shadow:7px 7px 0 var(--ink);display:flex;flex-direction:column;justify-content:center;padding:22px 30px}
+.flip .front{background:var(--k);align-items:center;text-align:center}
+.flip .front b{font-family:var(--display);font-weight:700;font-size:66px;line-height:1}
+.flip .front span{font-family:var(--display);font-weight:500;font-size:22px;margin-top:10px;opacity:.85}
+.flip .back{background:var(--white);transform:rotateY(180deg);font-size:24px;line-height:1.3}
+.flip .back em{font-style:italic;color:var(--ink-soft);display:block;font-size:21px;margin-bottom:6px}
+.flip:focus-visible .face{outline:4px solid var(--sky);outline-offset:4px}
+
+/* ---------- limites ---------- */
+.notes{display:grid;grid-template-columns:repeat(4,1fr);gap:34px}
+.note{background:var(--k);border:3px solid var(--ink);border-radius:26px;box-shadow:7px 7px 0 var(--ink);padding:28px 26px;display:flex;flex-direction:column;gap:14px;min-height:280px}
+.note:nth-child(1){transform:rotate(-2deg)}.note:nth-child(2){transform:rotate(1.5deg)}.note:nth-child(3){transform:rotate(-1deg)}.note:nth-child(4){transform:rotate(2deg)}
+.note h3{font-size:36px}
+.note p{font-size:28px;line-height:1.3}
+
+/* ---------- diferencial (órbita) ---------- */
+.orbit{position:relative;width:820px;height:720px;flex:none}
+.orbit svg{position:absolute;inset:0}
+.orbit .core{position:absolute;left:410px;top:360px;width:210px;height:210px;transform:translate(-50%,-50%);border-radius:50%;background:var(--c);border:4px solid var(--ink);box-shadow:8px 8px 0 var(--ink);display:grid;place-items:center;font-family:var(--display);font-weight:700;font-size:62px;color:var(--on-c)}
+.orbit .chip{position:absolute;transform:translate(-50%,-50%);white-space:nowrap}
+
+/* ---------- níveis ---------- */
+.levels{display:flex;align-items:flex-end;gap:36px;height:560px;flex:none}
+.lv{width:250px;display:flex;flex-direction:column;justify-content:flex-start;gap:6px;background:var(--k);border:4px solid var(--ink);border-radius:30px 30px 14px 14px;box-shadow:8px 8px 0 var(--ink);padding:22px 24px;transform-origin:bottom center}
+.lv b{font-family:var(--display);font-weight:700;font-size:46px;line-height:1}
+.lv span{font-family:var(--display);font-weight:500;font-size:27px;line-height:1.15}
+.lv-1{height:200px}.lv-2{height:370px}.lv-3{height:550px}
+.facts{display:flex;flex-direction:column;gap:22px}
+.facts .card{font-size:30px;line-height:1.32;padding:22px 30px}
+
+/* ---------- linha da vida ---------- */
+.life{position:relative;width:1620px;height:200px;flex:none}
+.life svg{position:absolute;inset:0;overflow:visible}
+.life-cards{position:relative;width:1620px;height:380px;flex:none}
+.life-cards .card{position:absolute;top:0;width:370px;transform:translateX(-50%);padding:26px 28px}
+.life-cards h3{font-size:38px;display:flex;align-items:center;gap:12px}
+.life-cards p{font-size:26px;line-height:1.32;margin-top:10px;color:var(--ink-soft)}
+.node{position:absolute;top:100px;width:62px;height:62px;border-radius:50%;background:var(--k);border:4px solid var(--ink);transform:translate(-50%,-50%);box-shadow:4px 4px 0 var(--ink)}
+
+/* ---------- intervenções ---------- */
+.nope{position:relative;align-self:flex-start;font-family:var(--display);font-weight:500;font-size:48px;color:var(--ink-soft);padding:0 8px}
+.nope .strike{position:absolute;left:-10px;right:-10px;top:52%;height:12px;background:var(--coral);border-radius:999px;border:3px solid var(--ink);transform-origin:left center}
+.goals{display:flex;flex-wrap:wrap;gap:22px}
+.goals .chip{font-size:40px;padding:16px 34px;font-weight:600;box-shadow:7px 7px 0 var(--ink)}
+.team{display:flex;flex-wrap:wrap;gap:16px;margin-top:6px}
+.team .chip{font-size:27px;padding:10px 22px}
+
+.adapt{display:flex;flex-direction:column;gap:18px}
+.adapt li{list-style:none;display:flex;gap:18px;align-items:center;font-size:32px}
+.adapt ul{margin:0;padding:0;display:flex;flex-direction:column;gap:18px}
+.tick{flex:none;width:52px;height:52px;border-radius:16px;background:var(--k);border:3px solid var(--ink);display:grid;place-items:center}
+.tick svg{width:30px;height:30px}
+
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:34px 40px}
+.tile{display:flex;gap:24px;align-items:flex-start}
+.tile .letter{width:84px;height:84px}
+.tile h3{font-size:36px}
+.tile p{font-size:27px;line-height:1.32;color:var(--ink-soft);margin-top:6px}
+
+.points{display:flex;flex-direction:column;gap:22px}
+.point{display:flex;gap:22px;align-items:flex-start;font-size:30px;line-height:1.33}
+.point .dot{width:30px;height:30px;margin-top:6px}
+
+.refs{display:flex;flex-direction:column;gap:20px;font-size:25px;line-height:1.38;max-width:1500px}
+.refs p{padding-left:26px;border-left:6px solid var(--k);}
+.refs i{font-style:italic}
+
+.end{align-items:center;justify-content:center;text-align:center;gap:30px}
+.end .inf{width:520px}
+.end h1{font-size:120px}
+
+/* ---------- navegação no palco ---------- */
+.dots{position:absolute;left:50%;bottom:38px;transform:translateX(-50%);display:flex;gap:10px;z-index:5}
+.dots button{all:unset;cursor:pointer;width:16px;height:16px;border-radius:999px;background:var(--line);border:2px solid var(--ink-soft);transition:width .35s cubic-bezier(.3,1.5,.5,1),background .3s}
+.dots button.on{width:52px;background:var(--k);border-color:var(--ink)}
+.dots button.seen{background:var(--k);opacity:.55}
+.foot{position:absolute;bottom:32px;z-index:5;font-family:var(--display);font-weight:500;font-size:22px;color:var(--ink-soft)}
+.foot.l{left:150px}.foot.r{right:150px;font-variant-numeric:tabular-nums}
+
+.iris{position:absolute;inset:0;z-index:20;pointer-events:none;background:var(--coral);clip-path:circle(0px at 50% 50%);visibility:hidden}
+.iris i{position:absolute;border-radius:50%;background:var(--white);border:4px solid var(--ink);opacity:.9}
+.blackout{position:absolute;inset:0;z-index:30;background:var(--ink);display:grid;place-items:center}
+.blackout svg{width:240px;opacity:.9}
+
+/* ---------- controles (fora do palco) ---------- */
+.ctrl{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));display:flex;gap:10px;z-index:50;transition:opacity .4s}
+.ctrl.idle{opacity:0}
+.ctrl button{all:unset;cursor:pointer;height:46px;min-width:46px;padding:0 14px;display:grid;place-items:center;background:var(--white);color:var(--ink);border:2.5px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);font-family:var(--display);font-weight:600;font-size:17px;box-sizing:border-box}
+.ctrl button[aria-pressed="true"]{background:var(--leaf)}
+.ctrl button:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+.hint{position:fixed;left:50%;top:max(18px,env(safe-area-inset-top,0px));transform:translateX(-50%);z-index:50;background:var(--ink);color:var(--white);font-family:var(--display);font-weight:500;font-size:16px;padding:10px 20px;border-radius:999px;max-width:calc(100% - 32px);text-align:center;transition:opacity .6s}
+.hint.gone{opacity:0;pointer-events:none}
+.hint kbd{font-family:inherit;background:rgba(255,255,255,.18);border-radius:6px;padding:1px 7px}
+
+/* ================= MODO CELULAR: slides empilhados em rolagem vertical ================= */
+.m body, body.m{overflow:auto}
+.m .viewport{position:static;padding-block:0}
+.m .stage-wrap{height:auto}
+.m .stage{position:static;width:100%;height:auto;transform:none!important;overflow:visible;background:transparent;border-radius:0}
+.m .bg,.m .dots,.m .foot,.m .iris,.m .hint,.m #bPrev,.m #bNext,.m #bFull{display:none!important}
+.m .slide{position:relative;inset:auto;visibility:visible!important;opacity:1!important;padding:44px 0 52px;gap:20px;border-bottom:3px dashed var(--line)}
+.m .slide:last-of-type{border-bottom:0}
+.m .slide [data-step]{visibility:visible!important;opacity:1!important}
+.m h1{font-size:36px!important}
+.m h2{font-size:30px!important}
+.m h3{font-size:21px!important}
+.m .lead,.m .cover-text .lead{font-size:19px!important;max-width:none!important}
+.m .body,.m .body[style]{font-size:17px!important;max-width:none!important}
+.m .small,.m .small[style],.m .src,.m .src[style]{font-size:14px!important}
+.m p[style*="font-size"]{font-size:16px!important}
+.m .eyebrow{font-size:13px;padding:5px 14px 5px 6px;gap:8px;border-width:2px;box-shadow:3px 3px 0 var(--ink)}
+.m .eyebrow.solo{padding:5px 14px}
+.m .eyebrow .num{font-size:12px;padding:0 8px;border-width:2px}
+.m .row,.m .row[style]{flex-direction:column;align-items:stretch!important;gap:26px!important;flex:none!important}
+.m .col,.m .col[style]{width:auto!important;gap:18px!important}
+.m .slide [style*="width:"]{width:auto!important;max-width:100%!important}
+.m .slot{width:min(300px,82%);margin:4px auto 10px}
+.m .slot::before{transform:rotate(-6deg) translate(9px,7px);border-width:2px}
+.m .card{border-width:2.5px;border-radius:20px;box-shadow:5px 5px 0 var(--ink);padding:16px 18px}
+.m .chip,.m .bubble{font-size:15px;padding:7px 14px;border-width:2px;box-shadow:3px 3px 0 var(--ink);gap:8px}
+.m .chips,.m .bubbles{gap:12px 10px}
+.m .bubble::after{width:14px;height:14px;bottom:-9px;border-width:2px}
+.m .dot{width:12px;height:12px;border-width:2px}
+.m .callout{font-size:16px;padding:16px 18px;gap:14px;border-radius:20px;border-width:2.5px;box-shadow:5px 5px 0 var(--c)}
+.m .callout .ic{width:38px;height:38px;font-size:22px;border-width:2px}
+.m .sticker{font-size:18px;padding:14px 18px;border-radius:18px;box-shadow:5px 5px 0 var(--ink)}
+.m .banner{gap:16px;padding:18px;border-radius:22px;box-shadow:6px 6px 0 var(--c);align-items:flex-start}
+.m .banner h3{font-size:21px!important}
+.m .banner p{font-size:15px}
+.m .banner .no{width:52px;height:52px;border-width:2px}
+.m .banner .no svg{width:30px;height:30px}
+/* capa */
+.m .s-cover{padding-top:28px}
+.m .cover-grid{grid-template-columns:1fr;gap:30px}
+.m .authors li{font-size:14px;padding:4px 12px;border-width:2px}
+.m .cover-art{width:min(300px,82%);margin:0 auto}
+.m .cover-art .slot{width:100%}
+.m .cover-art .inf{width:130px;right:-30px;top:-26px}
+/* roteiro */
+.m .route{width:auto;height:auto;display:grid;grid-template-columns:1fr 1fr;gap:20px 12px}
+.m .route svg{display:none}
+.m .stop{position:static;transform:none!important;width:auto;gap:8px}
+.m .stop .b{width:52px;height:52px;font-size:18px;border-width:2px;box-shadow:3px 3px 0 var(--ink)}
+.m .stop span{font-size:15px}
+/* espectro */
+.m .big-word{font-size:clamp(40px,12vw,64px);-webkit-text-stroke:2px var(--ink);text-shadow:3px 3px 0 var(--ink);flex-wrap:wrap}
+.m .domains,.m .pair{grid-template-columns:1fr;gap:18px}
+.m .domains .card{gap:14px}
+.m .letter{width:44px;height:44px;font-size:22px;border-radius:14px;border-width:2px}
+/* critérios */
+.m .check{font-size:17px;gap:14px;align-items:flex-start}
+.m .check svg{width:40px;height:40px}
+.m .check small{font-size:14px}
+/* padrões */
+.m .pill{font-size:16px;padding:8px 16px 8px 8px;border-width:2px;box-shadow:3px 3px 0 var(--ink);gap:10px}
+.m .pill:nth-child(n){margin-left:0}
+.m .pill:nth-child(2),.m .pill:nth-child(4){margin-left:18px}.m .pill:nth-child(3){margin-left:36px}
+.m .pills{gap:12px}
+.m .loop{width:28px;height:28px;border-width:2px}.m .loop i{width:8px;height:8px;top:2px;left:8px}
+/* sensorial */
+.m .senses{grid-template-columns:repeat(3,1fr);gap:16px 10px}
+.m .sense .ring{width:78px;height:78px;border-width:2px;box-shadow:3px 3px 0 var(--ink)}
+.m .sense svg{width:44px;height:44px}
+.m .sense span{font-size:14px}
+.m .hh{flex-wrap:wrap;gap:10px}
+/* rastreio */
+.m .neq{flex-wrap:wrap;gap:12px}
+.m .neq .big{font-size:24px;padding:10px 22px;border-width:3px;box-shadow:4px 4px 0 var(--ink)}
+.m .neq svg{width:52px;height:52px}
+.m .pair .card{font-size:17px;gap:14px}
+.m .pm{width:44px;height:44px;font-size:28px;border-width:2px}
+/* fontes */
+.m .hub{width:auto;height:auto;display:flex;flex-direction:column;gap:16px}
+.m .hub svg{display:none}
+.m .hub .center{position:static;transform:none;width:auto;height:auto;border-radius:24px;padding:16px;font-size:20px;border-width:3px;box-shadow:5px 5px 0 var(--ink)}
+.m .hub .sat{position:static;transform:none!important;width:auto}
+.m .hub .sat h3{font-size:19px!important;gap:10px}
+.m .hub .sat p{font-size:15px}
+.m .hub .sticker{position:static;transform:rotate(-1.5deg)!important;width:auto;font-size:17px}
+/* instrumentos */
+.m .flips{grid-template-columns:1fr;gap:16px}
+.m .flip{height:130px}
+.m .flip .face{border-radius:20px;border-width:2.5px;box-shadow:4px 4px 0 var(--ink);padding:14px 18px}
+.m .flip .front b{font-size:38px}.m .flip .front span{font-size:14px}
+.m .flip .back{font-size:15px}.m .flip .back em{font-size:13px}
+/* limites */
+.m .notes{grid-template-columns:1fr 1fr;gap:16px}
+.m .note{min-height:0;padding:16px;gap:6px;border-radius:18px;border-width:2px;box-shadow:4px 4px 0 var(--ink)}
+.m .note h3{font-size:17px!important}.m .note p{font-size:14px}
+/* diferencial */
+.m .orbit{width:auto;height:auto;display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.m .orbit svg{display:none}
+.m .orbit .core{position:static;transform:none;width:84px;height:84px;font-size:26px;border-width:3px;box-shadow:4px 4px 0 var(--ink);margin:0 calc(50% - 42px) 6px}
+.m .orbit .chip{position:static;transform:none!important;white-space:normal}
+/* níveis */
+.m .levels{height:240px;gap:12px;justify-content:center}
+.m .lv{width:31%;padding:10px;border-width:2.5px;border-radius:18px 18px 10px 10px;box-shadow:4px 4px 0 var(--ink)}
+.m .lv b{font-size:19px}.m .lv span{font-size:12px}
+.m .lv-1{height:90px}.m .lv-2{height:165px}.m .lv-3{height:240px}
+.m .facts{gap:14px}
+.m .facts .card{font-size:16px;padding:14px 16px}
+/* linha da vida */
+.m .life{display:none}
+.m .life-cards{width:auto;height:auto;display:flex;flex-direction:column;gap:16px}
+.m .life-cards .card{position:static;transform:none!important;width:auto}
+.m .life-cards h3{font-size:20px!important}.m .life-cards p{font-size:15px}
+/* intervenções */
+.m .nope{font-size:20px}
+.m .nope .strike{height:7px;border-width:2px}
+.m .goals{gap:10px}
+.m .goals .chip{font-size:17px;padding:8px 16px;box-shadow:3px 3px 0 var(--ink)}
+.m .team .chip{font-size:14px;padding:6px 12px}
+.m .adapt li{font-size:17px;gap:12px}
+.m .adapt ul,.m .adapt{gap:12px}
+.m .tick{width:34px;height:34px;border-radius:10px;border-width:2px}.m .tick svg{width:20px;height:20px}
+.m .tiles{grid-template-columns:1fr;gap:18px}
+.m .tile{gap:14px}
+.m .tile p{font-size:15px}
+.m .point{font-size:17px;gap:12px}.m .point .dot{width:18px;height:18px;margin-top:4px}
+.m .refs{font-size:14px;gap:12px}.m .refs p{padding-left:12px;border-left-width:4px;overflow-wrap:anywhere}
+.m .end{min-height:70vh}
+.m .end .inf{width:200px}
+.m .ctrl{right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px))}
+.m .ctrl button{height:40px;font-size:14px}
+</style>
+
+<div class="viewport" id="vp">
+ <div class="stage-wrap" id="wrap">
+  <div class="stage" id="stage" aria-live="polite">
+   <div class="bg" id="bg" aria-hidden="true"></div>
+
+   <!-- 1 · CAPA -->
+   <section class="slide s-cover active" data-c="coral" data-title="Capa" aria-label="Capa">
+    <div class="cover-grid">
+     <div class="cover-text">
+      <div class="eyebrow solo in">Psicologia · Diagnóstico e Intervenção</div>
+      <h1 class="split">Diagnóstico e intervenção no <span class="hl">Transtorno do Espectro Autista</span> (TEA)</h1>
+      <p class="lead in">Avaliação ao longo da vida e necessidades de suporte</p>
+      <div class="authors in">
+       <ul>
+        <li>Leiliane Aguiar Silva</li><li>Milena Alexandre Jaques</li><li>Neriglissor Spohr</li><li>Raquel Chumber Medeiros</li><li>Rosa Maria Pires de Souza</li>
+       </ul>
+       <p class="small">Prof.ª Emilly Leite · Universidade Anhanguera · Polo Paragominas/PA · 2026</p>
+      </div>
+     </div>
+     <div class="cover-art in">
+      <figure class="slot art" style="--r:4/5"><div class="frame"><svg class="scene" data-scene="cover" viewBox="0 0 400 500" role="img" aria-label="Cinco personagens coloridos de formas diferentes, cada um se movendo do seu jeito" stroke-linejoin="round" stroke-linecap="round"><rect width="400" height="500" fill="#FFFFFF"/><ellipse class="shd" cx="118" cy="222" rx="46" ry="9" fill="#D6D8EA"/><g class="ch"><g class="mv"><circle cx="118" cy="150" r="56" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="6"/><circle cx="102.0" cy="148.0" r="4.5" fill="#1D1A3F"/><circle cx="134.0" cy="148.0" r="4.5" fill="#1D1A3F"/><path d="M102.0 166.5 q16.0 15.0 32.0 0" fill="none" stroke="#1D1A3F" stroke-width="5"/></g></g><ellipse class="shd" cx="284" cy="222" rx="52" ry="9" fill="#D6D8EA"/><g class="ch"><g class="mv"><rect x="232" y="104" width="104" height="104" rx="26" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="6"/><circle cx="268.6" cy="156.0" r="4.3" fill="#1D1A3F"/><circle cx="299.4" cy="156.0" r="4.3" fill="#1D1A3F"/><path d="M268.6 173.8 q15.4 14.4 30.7 0" fill="none" stroke="#1D1A3F" stroke-width="5"/></g></g><ellipse class="shd" cx="200" cy="336" rx="58" ry="9" fill="#D6D8EA"/><g class="ch"><g class="mv"><path d="M200 214 L262 322 L138 322Z" fill="#22B97F" stroke="#1D1A3F" stroke-width="6"/><circle cx="187.8" cy="284.0" r="3.5" fill="#1D1A3F"/><circle cx="212.2" cy="284.0" r="3.5" fill="#1D1A3F"/><path d="M187.8 298.5 q12.2 11.4 24.3 0" fill="none" stroke="#1D1A3F" stroke-width="5"/></g></g><ellipse class="shd" cx="105" cy="466" rx="48" ry="9" fill="#D6D8EA"/><g class="ch"><g class="mv"><polygon points="105.0,332.0 121.5,369.3 162.1,373.5 131.6,400.7 140.3,440.5 105.0,420.0 69.7,440.5 78.4,400.7 47.9,373.5 88.5,369.3" fill="#3B93FF" stroke="#1D1A3F" stroke-width="6"/><circle cx="94.1" cy="396.0" r="3.5" fill="#1D1A3F"/><circle cx="115.9" cy="396.0" r="3.5" fill="#1D1A3F"/><path d="M94.1 409.2 q10.9 10.2 21.8 0" fill="none" stroke="#1D1A3F" stroke-width="5"/></g></g><ellipse class="shd" cx="300" cy="462" rx="40" ry="9" fill="#D6D8EA"/><g class="ch"><g class="mv"><rect x="266" y="296" width="68" height="152" rx="34" fill="#8A6BFF" stroke="#1D1A3F" stroke-width="6"/><circle cx="287.8" cy="344.0" r="3.5" fill="#1D1A3F"/><circle cx="312.2" cy="344.0" r="3.5" fill="#1D1A3F"/><path d="M287.8 358.5 q12.2 11.4 24.3 0" fill="none" stroke="#1D1A3F" stroke-width="5"/></g></g></svg></div></figure>
+      <svg class="inf" viewBox="0 0 240 120" aria-hidden="true"><defs><linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#FF6A5C"/><stop offset=".25" stop-color="#FFBE2E"/><stop offset=".5" stop-color="#22B97F"/><stop offset=".75" stop-color="#3B93FF"/><stop offset="1" stop-color="#8A6BFF"/></linearGradient></defs><path class="draw" d="M120 60 C150 18 218 18 218 60 C218 102 150 102 120 60 C90 18 22 18 22 60 C22 102 90 102 120 60 Z" fill="none" stroke="url(#g1)" stroke-width="20" stroke-linecap="round"/></svg>
+     </div>
+    </div>
+   </section>
+
+   <!-- 2 · ROTEIRO -->
+   <section class="slide" data-c="sun" data-title="Roteiro" aria-label="Roteiro">
+    <div class="head">
+     <div class="eyebrow solo in">Roteiro</div>
+     <h2 class="split">O caminho de hoje</h2>
+    </div>
+    <div class="route">
+     <svg viewBox="0 0 1620 560" aria-hidden="true"><path class="draw" d="M200 140 L1400 140 C1590 140 1590 420 1400 420 L200 420" fill="none" stroke="#1D1A3F" stroke-width="8" stroke-linecap="round"/></svg>
+     <div class="stop in k-coral" style="left:200px;top:140px"><div class="b">2.1</div><span>Conceito e critérios diagnósticos</span></div>
+     <div class="stop in k-sun" style="left:600px;top:140px"><div class="b">2.2</div><span>Comunicação social e padrões repetitivos</span></div>
+     <div class="stop in k-leaf" style="left:1000px;top:140px"><div class="b">2.3</div><span>Sinais de alerta e rastreio</span></div>
+     <div class="stop in k-sky" style="left:1400px;top:140px"><div class="b">2.4</div><span>História, entrevistas e observação</span></div>
+     <div class="stop in k-grape" style="left:1400px;top:420px"><div class="b">2.5</div><span>Avaliação psicológica e instrumentos</span></div>
+     <div class="stop in k-coral" style="left:1000px;top:420px"><div class="b">2.6</div><span>Diagnóstico diferencial</span></div>
+     <div class="stop in k-sun" style="left:600px;top:420px"><div class="b">2.7</div><span>Níveis de suporte ao longo da vida</span></div>
+     <div class="stop in k-leaf" style="left:200px;top:420px"><div class="b">2.8</div><span>Intervenções baseadas em evidências</span></div>
+    </div>
+   </section>
+
+   <!-- 3 · INTRODUÇÃO -->
+   <section class="slide" data-c="leaf" data-title="Introdução" aria-label="Introdução">
+    <div class="row">
+     <div class="col grow1">
+      <div class="eyebrow solo in">Introdução</div>
+      <h2 class="split">Uma condição do <span class="hl" style="--hl:var(--leaf)">neurodesenvolvimento</span></h2>
+      <p class="body in" style="max-width:34ch">Diferenças persistentes na comunicação e na interação social, associadas a padrões restritos ou repetitivos de comportamento, interesses ou atividades.</p>
+      <div class="chips">
+       <span class="chip f k-coral in">Manifestações variadas</span>
+       <span class="chip f k-sun in">Intensidades diferentes</span>
+       <span class="chip f k-sky in">Necessidades de suporte únicas</span>
+      </div>
+      <div class="callout" data-step="1"><div class="ic">+</div><div class="in">O reconhecimento não se limita às dificuldades: inclui <strong>potencialidades, interesses e possibilidades</strong> de desenvolvimento. <span class="src">(APA, 2022)</span></div></div>
+     </div>
+     <div style="width:520px" class="in">
+      <figure class="slot art"><div class="frame"><svg class="scene" data-scene="intro" viewBox="0 0 400 400" role="img" aria-label="Criança empilhando blocos coloridos" stroke-linejoin="round" stroke-linecap="round"><path d="M30 340 H370" stroke="#1D1A3F" stroke-width="5"/><g class=""><rect x="58" y="262" width="44" height="78" rx="22.0" fill="#3B93FF" stroke="#1D1A3F" stroke-width="5"/><g class="nod"><circle cx="80.0" cy="240" r="24" fill="#F2C9A0" stroke="#1D1A3F" stroke-width="5"/><circle cx="76.32" cy="238" r="2.6" fill="#1D1A3F"/><circle cx="91.68" cy="238" r="2.6" fill="#1D1A3F"/><path d="M76.32 248.4 q7.68 6.7 15.4 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g></g><rect class="blk" x="210" y="260" width="80" height="80" rx="12" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="5"/><rect class="blk" x="215" y="190" width="70" height="70" rx="12" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="5"/><circle class="blk" cx="250" cy="152" r="38" fill="#22B97F" stroke="#1D1A3F" stroke-width="5"/><path class="spark" d="M330 70 C333 92 336 95 358 98 C336 101 333 104 330 126 C327 104 324 101 302 98 C324 95 327 92 330 70Z" fill="#8A6BFF" stroke="#1D1A3F" stroke-width="4"/></svg></div></figure>
+     </div>
+    </div>
+   </section>
+
+   <!-- 4 · ESPECTRO -->
+   <section class="slide" data-c="coral" data-title="2.1 Conceito" aria-label="Por que espectro">
+    <div class="eyebrow in"><span class="num">2.1</span>Conceito de TEA</div>
+    <div class="big-word" aria-label="Espectro">
+     <span class="in" style="color:var(--coral)">E</span><span class="in" style="color:var(--sun)">S</span><span class="in" style="color:var(--leaf)">P</span><span class="in" style="color:var(--sky)">E</span><span class="in" style="color:var(--grape)">C</span><span class="in" style="color:var(--coral)">T</span><span class="in" style="color:var(--sun)">R</span><span class="in" style="color:var(--leaf)">O</span>
+    </div>
+    <p class="lead in" style="max-width:46ch">O termo destaca a diversidade: pessoas autistas não têm necessariamente as mesmas características, habilidades ou necessidades de apoio.</p>
+    <div data-step="1">
+     <p class="src in" style="margin-bottom:18px">DSM-5-TR (APA, 2022) · dois grandes conjuntos de características</p>
+     <div class="domains">
+      <div class="card in"><div class="letter k-sky">A</div><div><h3>Comunicação e interação social</h3><p class="body" style="font-size:28px;margin-top:8px;color:var(--ink-soft)">Dificuldades persistentes, observadas em diferentes contextos.</p></div></div>
+      <div class="card in"><div class="letter k-sun">B</div><div><h3>Padrões restritos ou repetitivos</h3><p class="body" style="font-size:28px;margin-top:8px;color:var(--ink-soft)">De comportamento, interesses ou atividades, incluindo particularidades sensoriais.</p></div></div>
+     </div>
+    </div>
+   </section>
+
+   <!-- 5 · CRITÉRIOS -->
+   <section class="slide" data-c="sky" data-title="2.1 Critérios" aria-label="Critérios diagnósticos">
+    <div class="head">
+     <div class="eyebrow in"><span class="num">2.1</span>Critérios diagnósticos</div>
+     <h2 class="split">O que o diagnóstico considera</h2>
+    </div>
+    <div class="checks">
+     <div class="check in"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="32" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="4"/><path class="draw" d="M22 37 L32 47 L51 26" fill="none" stroke="#1D1A3F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg><div>Manifestações presentes no período do desenvolvimento<small>podem ficar evidentes quando as exigências sociais aumentam ou ser compensadas por estratégias aprendidas</small></div></div>
+     <div class="check in"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="32" fill="#22B97F" stroke="#1D1A3F" stroke-width="4"/><path class="draw" d="M22 37 L32 47 L51 26" fill="none" stroke="#1D1A3F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg><div>Impacto clinicamente significativo no funcionamento cotidiano</div></div>
+     <div class="check in"><svg viewBox="0 0 72 72"><circle cx="36" cy="36" r="32" fill="#8A6BFF" stroke="#1D1A3F" stroke-width="4"/><path class="draw" d="M22 37 L32 47 L51 26" fill="none" stroke="#1D1A3F" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/></svg><div>Não mais bem explicado por deficiência intelectual ou atraso global do desenvolvimento<small>A CID-11 (OMS, 2024) também considera o desenvolvimento intelectual e a linguagem funcional</small></div></div>
+    </div>
+    <div class="banner" data-step="1">
+     <div class="no"><svg viewBox="0 0 60 60" width="60" height="60"><path d="M14 14 L46 46 M46 14 L14 46" stroke="#1D1A3F" stroke-width="9" stroke-linecap="round"/></svg></div>
+     <div class="in"><h3>Nenhum comportamento isolado confirma o TEA</h3><p>Evitar contato visual ou preferir rotinas não basta. O diagnóstico é feito por profissionais habilitados, com base na história de desenvolvimento.</p></div>
+    </div>
+   </section>
+
+   <!-- 6 · COMUNICAÇÃO SOCIAL -->
+   <section class="slide" data-c="sun" data-title="2.2 Comunicação social" aria-label="Comunicação social">
+    <div class="row">
+     <div class="col grow1">
+      <div class="eyebrow in"><span class="num">2.2</span>Comunicação social</div>
+      <h2 class="split">Cada pessoa se comunica do seu jeito</h2>
+      <p class="small in" style="font-size:28px">Algumas pessoas podem ter dificuldade para:</p>
+      <div class="bubbles">
+       <span class="bubble in">iniciar ou manter conversas</span>
+       <span class="bubble f k-sky in">compreender expressões faciais</span>
+       <span class="bubble in">interpretar gestos</span>
+       <span class="bubble f k-leaf in">perceber regras sociais implícitas</span>
+       <span class="bubble f k-coral in">compartilhar interesses e emoções</span>
+       <span class="bubble in">entender ironias e duplos sentidos</span>
+      </div>
+      <div class="callout" data-step="1"><div class="ic">♥</div><div class="in">Isso <strong>não significa ausência</strong> de sentimentos, afeto ou interesse pelas pessoas. A forma de expressar emoções e criar vínculos pode simplesmente ser diferente.</div></div>
+     </div>
+     <div style="width:470px" class="in">
+      <figure class="slot art"><div class="frame"><svg class="scene" data-scene="comm" viewBox="0 0 400 400" role="img" aria-label="Duas pessoas conversando com balões de fala diferentes" stroke-linejoin="round" stroke-linecap="round"><path d="M30 360 H370" stroke="#1D1A3F" stroke-width="5"/><g class=""><rect x="88" y="282" width="44" height="78" rx="22.0" fill="#22B97F" stroke="#1D1A3F" stroke-width="5"/><g class="nod"><circle cx="110.0" cy="260" r="24" fill="#D9A27A" stroke="#1D1A3F" stroke-width="5"/><circle cx="105.32" cy="258" r="2.6" fill="#1D1A3F"/><circle cx="120.68" cy="258" r="2.6" fill="#1D1A3F"/><path d="M105.32 268.4 q7.68 6.7 15.4 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g></g><g class=""><rect x="268" y="272" width="44" height="88" rx="22.0" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="5"/><g class="nod"><circle cx="290.0" cy="250" r="24" fill="#8D5A3B" stroke="#1D1A3F" stroke-width="5"/><circle cx="279.32" cy="248" r="2.6" fill="#1D1A3F"/><circle cx="294.68" cy="248" r="2.6" fill="#1D1A3F"/><path d="M279.32 258.4 q7.68 6.7 15.4 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g></g><g class="bL"><path d="M100 170 L96 206 L130 176" fill="#fff" stroke="#1D1A3F" stroke-width="5"/><ellipse cx="128" cy="130" rx="80" ry="52" fill="#fff" stroke="#1D1A3F" stroke-width="5"/><circle class="dt" cx="100" cy="132" r="9" fill="#1D1A3F"/><circle class="dt" cx="128" cy="132" r="9" fill="#1D1A3F"/><circle class="dt" cx="156" cy="132" r="9" fill="#1D1A3F"/></g><g class="bR"><path d="M300 186 L306 222 L276 190" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="5"/><rect x="214" y="86" width="150" height="104" rx="28" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="5"/><path class="hrt" d="M258 160 C234 144 234 122 248 120 C254 119 258 124 258 128 C258 124 262 119 268 120 C282 122 282 144 258 160Z" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="4"/><path d="M322 116 l7 14 15 2 -11 10 3 15 -14 -8 -14 8 3 -15 -11 -10 15 -2z" fill="#fff" stroke="#1D1A3F" stroke-width="4"/></g></svg></div></figure>
+     </div>
+    </div>
+   </section>
+
+   <!-- 7 · PADRÕES REPETITIVOS -->
+   <section class="slide" data-c="leaf" data-title="2.2 Padrões repetitivos" aria-label="Padrões restritos ou repetitivos">
+    <div class="head">
+     <div class="eyebrow in"><span class="num">2.2</span>Padrões restritos ou repetitivos</div>
+     <h2 class="split">O que pode se repetir</h2>
+    </div>
+    <div class="row" style="align-items:flex-start">
+     <div class="pills" style="width:800px;flex:none">
+      <div class="pill k-sun in"><span class="loop"><i></i></span>Movimentos corporais repetidos</div>
+      <div class="pill k-sky in"><span class="loop"><i></i></span>Repetição de palavras ou frases</div>
+      <div class="pill k-coral in"><span class="loop"><i></i></span>Interesse intenso por assuntos</div>
+      <div class="pill k-grape in"><span class="loop"><i></i></span>Preferência por rotinas</div>
+      <div class="pill k-leaf in"><span class="loop"><i></i></span>Desconforto com mudanças inesperadas</div>
+     </div>
+     <div class="col grow1">
+      <p class="body in">Podem interferir na escola, na família, no trabalho e no cotidiano, <strong>principalmente quando o ambiente não oferece adaptações</strong>.</p>
+      <div class="card" data-step="1" style="box-shadow:8px 8px 0 var(--leaf)">
+       <h3 class="in">Também podem ser potencialidades</h3>
+       <div class="chips" style="margin-top:20px">
+        <span class="chip in">Interesses específicos</span>
+        <span class="chip in">Atenção a detalhes</span>
+        <span class="chip in">Atividades estruturadas</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section>
+
+   <!-- 8 · SENSORIAL -->
+   <section class="slide" data-c="sky" data-title="2.2 Sensorialidade" aria-label="Sensorialidade">
+    <div class="row">
+     <div class="col grow1">
+      <div class="eyebrow in"><span class="num">2.2</span>Processamento sensorial</div>
+      <h2 class="split">Hiper ou hipossensibilidade</h2>
+      <p class="body in" style="color:var(--ink-soft)">Estímulos do dia a dia podem ser percebidos de forma muito intensa ou pouco intensa.</p>
+      <div class="senses">
+       <button class="sense in k-coral" type="button" aria-label="Sons"><span class="ring"><svg viewBox="0 0 96 96" fill="none" stroke="#1D1A3F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 38 H30 L48 22 V74 L30 58 H16 Z" fill="#fff"/><path d="M60 36 Q70 48 60 60"/><path d="M70 26 Q88 48 70 70"/></svg></span><span>Sons</span></button>
+       <button class="sense in k-sun" type="button" aria-label="Luzes"><span class="ring"><svg viewBox="0 0 96 96" fill="none" stroke="#1D1A3F" stroke-width="6" stroke-linecap="round"><circle cx="48" cy="48" r="16" fill="#fff"/><path d="M48 12v10M48 74v10M12 48h10M74 48h10M23 23l7 7M66 66l7 7M73 23l-7 7M30 66l-7 7"/></svg></span><span>Luzes</span></button>
+       <button class="sense in k-leaf" type="button" aria-label="Cheiros"><span class="ring"><svg viewBox="0 0 96 96" fill="none" stroke="#1D1A3F" stroke-width="6" stroke-linecap="round"><path d="M30 78 C22 66 38 58 30 46 C22 34 38 26 30 14"/><path d="M50 78 C42 66 58 58 50 46 C42 34 58 26 50 14"/><path d="M70 78 C62 66 78 58 70 46 C62 34 78 26 70 14"/></svg></span><span>Cheiros</span></button>
+       <button class="sense in k-grape" type="button" aria-label="Texturas"><span class="ring"><svg viewBox="0 0 96 96" fill="none" stroke="#1D1A3F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="64" height="64" rx="14" fill="#fff"/><path d="M26 36 l8 -8 l8 8 l8 -8 l8 8 l8 -8"/><path d="M26 56 l8 -8 l8 8 l8 -8 l8 8 l8 -8"/><path d="M26 74 l8 -8 l8 8 l8 -8 l8 8 l8 -8"/></svg></span><span>Texturas</span></button>
+       <button class="sense in k-sky" type="button" aria-label="Sensações físicas"><span class="ring"><svg viewBox="0 0 96 96" fill="none" stroke="#1D1A3F" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"><circle cx="48" cy="22" r="10" fill="#fff"/><path d="M48 34 V62 M30 44 H66 M48 62 L36 82 M48 62 L60 82"/><path d="M14 30 q6 6 0 12 M82 30 q-6 6 0 12"/></svg></span><span>Sensações</span></button>
+      </div>
+      <div class="hh in">
+       <span class="chip"><b>Hiper</b>&nbsp;· chega forte demais</span>
+       <span class="chip"><b>Hipo</b>&nbsp;· quase não é percebido</span>
+      </div>
+     </div>
+     <div style="width:500px" class="in">
+      <figure class="slot art"><div class="frame"><svg class="scene" data-scene="sense" viewBox="0 0 400 400" role="img" aria-label="Pessoa tranquila usando abafador de ruído" stroke-linejoin="round" stroke-linecap="round"><g class="sunr"><circle cx="340" cy="62" r="18" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="5"/><path d="M366.0 62.0 L378.0 62.0" stroke="#1D1A3F" stroke-width="5"/><path d="M314.0 62.0 L302.0 62.0" stroke="#1D1A3F" stroke-width="5"/><path d="M340.0 88.0 L340.0 100.0" stroke="#1D1A3F" stroke-width="5"/><path d="M340.0 36.0 L340.0 24.0" stroke="#1D1A3F" stroke-width="5"/><path d="M358.4 80.4 L366.9 88.9" stroke="#1D1A3F" stroke-width="5"/><path d="M321.6 80.4 L313.1 88.9" stroke="#1D1A3F" stroke-width="5"/><path d="M358.4 43.6 L366.9 35.1" stroke="#1D1A3F" stroke-width="5"/><path d="M321.6 43.6 L313.1 35.1" stroke="#1D1A3F" stroke-width="5"/></g><g fill="none" stroke="#FF6A5C" stroke-width="7"><path class="wv" d="M62 172 q-22 40 0 80"/><path class="wv" d="M38 150 q-32 62 0 124"/><path class="wv" d="M338 172 q22 40 0 80"/><path class="wv" d="M362 150 q32 62 0 124"/></g><g class="head"><path d="M86 400 C86 318 314 318 314 400Z" fill="#3B93FF" stroke="#1D1A3F" stroke-width="5"/><circle cx="200" cy="212" r="86" fill="#F2C9A0" stroke="#1D1A3F" stroke-width="5"/><path d="M160 214 q12 10 24 0 M216 214 q12 10 24 0 M182 250 q18 14 36 0" fill="none" stroke="#1D1A3F" stroke-width="5"/><path d="M114 206 C114 84 286 84 286 206" fill="none" stroke="#1D1A3F" stroke-width="28"/><path d="M114 206 C114 84 286 84 286 206" fill="none" stroke="#8A6BFF" stroke-width="16"/><rect x="90" y="172" width="42" height="80" rx="20" fill="#8A6BFF" stroke="#1D1A3F" stroke-width="5"/><rect x="268" y="172" width="42" height="80" rx="20" fill="#8A6BFF" stroke="#1D1A3F" stroke-width="5"/></g></svg></div></figure>
+     </div>
+    </div>
+   </section>
+
+   <!-- 9 · SINAIS DE ALERTA -->
+   <section class="slide" data-c="grape" data-title="2.3 Sinais de alerta" aria-label="Sinais de alerta">
+    <div class="row">
+     <div class="col grow1">
+      <div class="eyebrow in"><span class="num">2.3</span>Sinais de alerta</div>
+      <h2 class="split">Podem surgir cedo ou só mais tarde</h2>
+      <p class="body in" style="color:var(--ink-soft)">Nos primeiros anos, mas também na adolescência ou na vida adulta. Na infância, merecem atenção diferenças em:</p>
+      <div class="chips">
+       <span class="chip in"><span class="dot k-coral"></span>desenvolvimento da comunicação</span>
+       <span class="chip in"><span class="dot k-sun"></span>resposta ao nome</span>
+       <span class="chip in"><span class="dot k-leaf"></span>atenção compartilhada</span>
+       <span class="chip in"><span class="dot k-sky"></span>uso de gestos</span>
+       <span class="chip in"><span class="dot k-grape"></span>brincadeiras simbólicas</span>
+       <span class="chip in"><span class="dot k-coral"></span>interação social</span>
+      </div>
+      <div class="callout" data-step="1"><div class="ic">✓</div><div class="in"><strong>M-CHAT-R/F</strong> · checklist de rastreio para crianças pequenas. Ajuda a identificar quem precisa de avaliação mais aprofundada.</div></div>
+     </div>
+     <div style="width:470px" class="in">
+      <figure class="slot art"><div class="frame"><svg class="scene" data-scene="scan" viewBox="0 0 400 400" role="img" aria-label="Lupa observando uma criança brincando" stroke-linejoin="round" stroke-linecap="round"><path d="M30 350 H370" stroke="#1D1A3F" stroke-width="5"/><g class=""><rect x="120" y="282" width="40" height="68" rx="20.0" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="5"/><g class="nod"><circle cx="140.0" cy="262" r="22" fill="#A8714E" stroke="#1D1A3F" stroke-width="5"/><circle cx="135.96" cy="260" r="2.5" fill="#1D1A3F"/><circle cx="150.04" cy="260" r="2.5" fill="#1D1A3F"/><path d="M135.96 269.7 q7.04 6.2 14.1 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g></g><rect x="292" y="315" width="36" height="35" rx="6" fill="#22B97F" stroke="#1D1A3F" stroke-width="5"/><g class="ball"><circle cx="250" cy="324" r="24" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="5"/><path d="M227 324 h46" stroke="#1D1A3F" stroke-width="4"/></g><g class="mag" transform="translate(180 160)"><path d="M30 30 L62 62" stroke="#1D1A3F" stroke-width="13"/><circle r="42" fill="#3B93FF" fill-opacity=".18" stroke="#1D1A3F" stroke-width="9"/><path d="M-22 -14 a26 26 0 0 1 14 -14" fill="none" stroke="#fff" stroke-width="6"/></g></svg></div></figure>
+     </div>
+    </div>
+   </section>
+
+   <!-- 10 · RASTREIO ≠ DIAGNÓSTICO -->
+   <section class="slide" data-c="coral" data-title="2.3 Rastreio" aria-label="Rastreio não é diagnóstico">
+    <div class="eyebrow in"><span class="num">2.3</span>Limites da triagem</div>
+    <div class="neq">
+     <div class="big k-sun in" style="background:var(--k)">Rastreio</div>
+     <svg viewBox="0 0 150 150" class="in" aria-label="diferente de"><path d="M30 58 H120 M30 92 H120" stroke="#1D1A3F" stroke-width="13" stroke-linecap="round"/><path class="draw" d="M100 20 L50 130" stroke="#FF6A5C" stroke-width="15" stroke-linecap="round"/></svg>
+     <div class="big k-sky in" style="background:var(--k)">Diagnóstico</div>
+    </div>
+    <div class="pair" data-step="1">
+     <div class="card in"><span class="pm k-coral">+</span><span>Resultado <strong>positivo não confirma</strong> que a criança é autista</span></div>
+     <div class="card in"><span class="pm k-leaf">−</span><span>Resultado <strong>negativo não exclui</strong> completamente a possibilidade</span></div>
+    </div>
+    <div class="callout" data-step="2" style="box-shadow:8px 8px 0 var(--leaf)"><div class="ic" style="background:var(--leaf)">!</div><div class="in">Diante de sinais persistentes, <strong>buscar avaliação sem esperar</strong> que todas as características apareçam. A identificação precoce favorece o acesso a apoios. <span class="src">(CDC, 2025; Ministério da Saúde, 2025)</span></div></div>
+   </section>
+
+   <!-- 11 · FONTES DE INFORMAÇÃO -->
+   <section class="slide" data-c="sun" data-title="2.4 Fontes de informação" aria-label="Fontes de informação">
+    <div class="head">
+     <div class="eyebrow in"><span class="num">2.4</span>História, entrevistas e observação</div>
+     <h2 class="split">Várias fontes, uma compreensão</h2>
+    </div>
+    <div class="hub">
+     <svg viewBox="0 0 1620 580" aria-hidden="true" fill="none" stroke="#1D1A3F" stroke-width="5" stroke-linecap="round">
+      <path class="draw" d="M810 260 L300 95"/><path class="draw" d="M810 260 L1320 95"/><path class="draw" d="M810 260 L300 440"/><path class="draw" d="M810 260 L1320 440"/>
+     </svg>
+     <div class="center in">Compreensão abrangente da pessoa</div>
+     <div class="sat card in" style="left:300px;top:95px"><h3><span class="dot k-coral"></span>História do desenvolvimento</h3><p>Linguagem, primeiras interações, brincadeiras, respostas sensoriais, adaptação a mudanças</p></div>
+     <div class="sat card in" style="left:1320px;top:95px"><h3><span class="dot k-leaf"></span>Entrevistas</h3><p>Pais e cuidadores; com adolescentes e adultos, ouvir diretamente a própria pessoa</p></div>
+     <div class="sat card in" style="left:300px;top:440px"><h3><span class="dot k-sky"></span>Observação clínica</h3><p>Situações estruturadas e espontâneas. O consultório é só um dos ambientes</p></div>
+     <div class="sat card in" style="left:1320px;top:440px"><h3><span class="dot k-grape"></span>Outros contextos</h3><p>Família, escola e trabalho. Divergências pedem novas observações (NICE, 2017)</p></div>
+     <div class="sticker" data-step="1">Nunca um encontro isolado ou uma única fonte</div>
+    </div>
+   </section>
+
+   <!-- 12 · AVALIAÇÃO PSICOLÓGICA -->
+   <section class="slide" data-c="leaf" data-title="2.5 Avaliação psicológica" aria-label="Avaliação psicológica">
+    <div class="row" style="flex:none;align-items:flex-start;gap:60px">
+     <div class="col grow1" style="gap:26px">
+      <div class="eyebrow in"><span class="num">2.5</span>Avaliação psicológica</div>
+      <h2 class="split">Conduzida por psicólogo habilitado</h2>
+      <p class="body in" style="color:var(--ink-soft)">Compreende desenvolvimento, comportamento, comunicação, habilidades cognitivas e adaptativas e funcionamento emocional.</p>
+      <div class="chips">
+       <span class="chip in">entrevistas clínicas</span><span class="chip in">observação comportamental</span><span class="chip in">registros do desenvolvimento</span><span class="chip in">questionários de rastreio</span>
+      </div>
+     </div>
+     <div style="width:440px" class="in">
+      <figure class="slot art"><div class="frame"><svg class="scene" data-scene="eval" viewBox="0 0 400 400" role="img" aria-label="Psicóloga e criança à mesa com formas" stroke-linejoin="round" stroke-linecap="round"><g class=""><rect x="70" y="172" width="64" height="118" rx="32.0" fill="#8A6BFF" stroke="#1D1A3F" stroke-width="5"/><g class="nod"><circle cx="102.0" cy="144" r="30" fill="#F2C9A0" stroke="#1D1A3F" stroke-width="5"/><circle cx="97.4" cy="142" r="3.3" fill="#1D1A3F"/><circle cx="116.6" cy="142" r="3.3" fill="#1D1A3F"/><path d="M97.4 154.5 q9.6 8.4 19.2 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g></g><g class=""><rect x="276" y="202" width="50" height="88" rx="25.0" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="5"/><g class="nod"><circle cx="301.0" cy="180" r="24" fill="#8D5A3B" stroke="#1D1A3F" stroke-width="5"/><circle cx="289.32" cy="178" r="2.6" fill="#1D1A3F"/><circle cx="304.68" cy="178" r="2.6" fill="#1D1A3F"/><path d="M289.32 188.4 q7.68 6.7 15.4 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g></g><path d="M72 304 V372 M328 304 V372" stroke="#1D1A3F" stroke-width="8"/><rect x="40" y="286" width="320" height="18" rx="9" fill="#D6D8EA" stroke="#1D1A3F" stroke-width="5"/><path class="shp" d="M130 282 L151 244 L172 282Z" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="5"/><rect class="shp" x="185" y="248" width="34" height="34" rx="6" fill="#22B97F" stroke="#1D1A3F" stroke-width="5"/><circle class="shp" cx="245" cy="265" r="17" fill="#3B93FF" stroke="#1D1A3F" stroke-width="5"/></svg></div></figure>
+     </div>
+    </div>
+    <div data-step="1" style="display:flex;flex-direction:column;gap:18px">
+     <p class="src in">Instrumentos da literatura internacional · clique para virar</p>
+     <div class="flips">
+      <button class="flip in k-sky" type="button" aria-label="ADOS-2"><div class="inner"><div class="face front"><b>ADOS-2</b><span>observação</span></div><div class="face back"><em>Autism Diagnostic Observation Schedule, 2ª ed.</em>Organiza a observação de comportamentos relacionados ao autismo.</div></div></button>
+      <button class="flip in k-sun" type="button" aria-label="ADI-R"><div class="inner"><div class="face front"><b>ADI-R</b><span>entrevista</span></div><div class="face back"><em>Autism Diagnostic Interview-Revised</em>Entrevista estruturada realizada com os cuidadores.</div></div></button>
+      <button class="flip in k-coral" type="button" aria-label="CARS-2"><div class="inner"><div class="face front"><b>CARS-2</b><span>escala</span></div><div class="face back"><em>Childhood Autism Rating Scale, 2ª ed.</em>Escala de avaliação de características associadas ao transtorno.</div></div></button>
+     </div>
+     <p class="small in">No Brasil: verificar evidências, adequação cultural e linguística e a situação do teste no <strong>SATEPSI</strong> (Conselho Federal de Psicologia).</p>
+    </div>
+   </section>
+
+   <!-- 13 · LIMITES DOS MÉTODOS -->
+   <section class="slide" data-c="grape" data-title="2.5 Limites dos métodos" aria-label="Limites de cada método">
+    <div class="head">
+     <div class="eyebrow in"><span class="num">2.5</span>Limites de cada método</div>
+     <h2 class="split">Todo método tem um ponto cego</h2>
+    </div>
+    <div class="notes">
+     <div class="note k-sun in"><h3>Questionários</h3><p>dependem da interpretação de quem responde</p></div>
+     <div class="note k-sky in"><h3>Entrevistas</h3><p>podem ser influenciadas pela memória</p></div>
+     <div class="note k-leaf in"><h3>Observação clínica</h3><p>pode não representar todos os contextos</p></div>
+     <div class="note k-coral in"><h3>Testes padronizados</h3><p>podem não captar toda a experiência individual</p></div>
+    </div>
+    <p class="body in" style="color:var(--ink-soft);max-width:60ch">Barreiras linguísticas, diferenças culturais, deficiência intelectual e condições concomitantes também dificultam a interpretação.</p>
+    <div class="banner" data-step="1">
+     <div class="no" style="background:var(--grape)"><svg viewBox="0 0 60 60" width="60" height="60"><circle cx="30" cy="30" r="16" fill="none" stroke="#fff" stroke-width="7"/><circle cx="30" cy="30" r="4" fill="#fff"/></svg></div>
+     <div class="in"><h3>Integrar diferentes fontes de evidência</h3><p>Nenhum instrumento isolado confirma o diagnóstico. Julgamento clínico e normas profissionais são indispensáveis (CDC, 2025; APA, 2022).</p></div>
+    </div>
+   </section>
+
+   <!-- 14 · DIAGNÓSTICO DIFERENCIAL -->
+   <section class="slide" data-c="coral" data-title="2.6 Diagnóstico diferencial" aria-label="Diagnóstico diferencial">
+    <div class="row" style="gap:40px">
+     <div class="col" style="width:760px;flex:none;gap:28px">
+      <div class="eyebrow in"><span class="num">2.6</span>Diagnóstico diferencial</div>
+      <h2 class="split">Semelhante não é igual</h2>
+      <p class="body in" style="color:var(--ink-soft)">Investigar condições com características parecidas e a possibilidade de que coexistam com o TEA.</p>
+      <p class="small in" style="font-size:27px"><strong>Também considerar:</strong> sono, alimentação, saúde física, dificuldades de aprendizagem e aspectos emocionais.</p>
+      <div class="callout" data-step="1"><div class="ic">?</div><div class="in">O TEA <strong>não explica tudo</strong>. Mudanças repentinas podem indicar dor, sofrimento psicológico ou alterações no ambiente. <span class="src">(NICE, 2017; OMS, 2024)</span></div></div>
+     </div>
+     <div class="orbit">
+      <svg viewBox="0 0 820 720" aria-hidden="true"><ellipse class="draw" cx="410" cy="360" rx="300" ry="268" fill="none" stroke="#1D1A3F" stroke-width="4" stroke-linecap="round"/></svg>
+      <div class="core in">TEA</div>
+      <span class="chip f k-sun in" style="left:410px;top:92px">TDAH</span>
+      <span class="chip f k-leaf in" style="left:670px;top:226px">Deficiência intelectual</span>
+      <span class="chip f k-sky in" style="left:670px;top:494px">Transtornos da linguagem</span>
+      <span class="chip f k-grape in" style="left:410px;top:628px">Ansiedade</span>
+      <span class="chip f k-sun in" style="left:150px;top:494px">Depressão</span>
+      <span class="chip f k-leaf in" style="left:150px;top:226px">Dificuldades auditivas</span>
+     </div>
+    </div>
+   </section>
+
+   <!-- 15 · NÍVEIS DE SUPORTE -->
+   <section class="slide" data-c="sky" data-title="2.7 Níveis de suporte" aria-label="Níveis de suporte">
+    <div class="head">
+     <div class="eyebrow in"><span class="num">2.7</span>Níveis de suporte · DSM-5-TR</div>
+    </div>
+    <div class="row" style="align-items:flex-end;gap:70px">
+     <div class="levels">
+      <div class="lv lv-1 k-sun grow"><b>Nível 1</b><span>necessidade de suporte</span></div>
+      <div class="lv lv-2 k-leaf grow"><b>Nível 2</b><span>suporte substancial</span></div>
+      <div class="lv lv-3 k-grape grow"><b>Nível 3</b><span>suporte muito substancial</span></div>
+     </div>
+     <div class="facts grow1">
+      <h2 class="split" style="font-size:64px">Quanto apoio, e em quê?</h2>
+      <p class="body in" style="color:var(--ink-soft)">Indicam a intensidade do suporte na comunicação social e nos padrões restritos ou repetitivos.</p>
+      <div class="card" data-step="1"><span class="in" style="display:block">Ajudam a descrição clínica, mas <strong>não medem</strong> capacidades, personalidade ou potencial.</span></div>
+      <div class="card" data-step="2"><span class="in" style="display:block">A necessidade varia com a situação: rotina, comunicação, deslocamento, autocuidado, participação social.</span></div>
+      <div class="sticker k" data-step="3" style="--k:var(--coral);align-self:flex-start">Não são rótulos fixos</div>
+     </div>
+    </div>
+   </section>
+
+   <!-- 16 · AO LONGO DA VIDA -->
+   <section class="slide" data-c="leaf" data-title="2.7 Ao longo da vida" aria-label="Suporte ao longo da vida">
+    <div class="head">
+     <div class="eyebrow in"><span class="num">2.7</span>Necessidades individuais</div>
+     <h2 class="split">O suporte muda com a vida</h2>
+    </div>
+    <div>
+     <div class="life">
+      <svg viewBox="0 0 1620 200" aria-hidden="true"><path class="draw" d="M200 100 Q403 10 607 100 T1013 100 T1420 100" fill="none" stroke="#1D1A3F" stroke-width="8" stroke-linecap="round"/></svg>
+      <span class="node k-coral in" style="left:200px"></span><span class="node k-sun in" style="left:607px"></span><span class="node k-sky in" style="left:1013px"></span><span class="node k-grape in" style="left:1420px"></span>
+     </div>
+     <div class="life-cards">
+      <div class="card" data-step="1" style="left:200px;box-shadow:8px 8px 0 var(--coral)"><div class="in"><h3>Infância</h3><p>Desenvolvimento da comunicação, brincadeiras e adaptação escolar</p></div></div>
+      <div class="card" data-step="2" style="left:607px;box-shadow:8px 8px 0 var(--sun)"><div class="in"><h3>Adolescência</h3><p>Autonomia, relações sociais e preparo para novas responsabilidades</p></div></div>
+      <div class="card" data-step="3" style="left:1013px;box-shadow:8px 8px 0 var(--sky)"><div class="in"><h3>Vida adulta</h3><p>Formação profissional, trabalho, organização do cotidiano e acesso à saúde</p></div></div>
+      <div class="card" data-step="4" style="left:1420px;box-shadow:8px 8px 0 var(--grape)"><div class="in"><h3>Velhice</h3><p>Saúde, manutenção da autonomia, rede de apoio e mudanças funcionais</p></div></div>
+     </div>
+    </div>
+   </section>
+
+   <!-- 17 · OBJETIVO DAS INTERVENÇÕES -->
+   <section class="slide" data-c="grape" data-title="2.8 Intervenções" aria-label="Objetivo das intervenções">
+    <div class="eyebrow in"><span class="num">2.8</span>Intervenções baseadas em evidências</div>
+    <h2 class="split">Qual é a meta?</h2>
+    <div class="nope in">Eliminar características do autismo<span class="strike"></span></div>
+    <div style="display:flex;flex-direction:column;gap:20px">
+     <p class="src in" style="font-size:28px">Favorecer:</p>
+     <div class="goals">
+      <span class="chip f k-coral in">comunicação</span><span class="chip f k-sun in">autonomia</span><span class="chip f k-leaf in">participação social</span><span class="chip f k-sky in">funcionalidade</span><span class="chip f k-grape in" style="color:var(--white)">qualidade de vida</span>
+     </div>
+    </div>
+    <div class="card" data-step="1" style="box-shadow:8px 8px 0 var(--grape)">
+     <p class="body in">Plano <strong>individualizado</strong>: resultados da avaliação, necessidades, preferências e objetivos definidos com a própria pessoa e, quando pertinente, com a família.</p>
+     <div class="team">
+      <span class="chip in">acompanhamento psicológico</span><span class="chip in">apoio educacional</span><span class="chip in">fonoaudiologia</span><span class="chip in">terapia ocupacional</span><span class="chip in">comunicação e interação social</span>
+     </div>
+    </div>
+   </section>
+
+   <!-- 18 · NA PRÁTICA -->
+   <section class="slide" data-c="sun" data-title="2.8 Na prática" aria-label="Comunicação e adaptações">
+    <div class="eyebrow in"><span class="num">2.8</span>Na prática</div>
+    <div class="row" style="gap:70px">
+     <div style="width:440px;flex:none" class="in">
+      <figure class="slot art"><div class="frame"><svg class="scene" data-scene="caa" viewBox="0 0 400 400" role="img" aria-label="Tablet com pictogramas de comunicação alternativa" stroke-linejoin="round" stroke-linecap="round"><rect x="50" y="60" width="300" height="290" rx="30" fill="#1D1A3F"/><rect x="68" y="78" width="264" height="254" rx="16" fill="#fff"/><g class="pc"><rect x="80" y="90" width="72" height="102" rx="14" fill="#D8E9FF" stroke="#1D1A3F" stroke-width="4"/><g transform="translate(116 134)"><path d="M-14 -12 h24 v22 a6 6 0 0 1 -6 6 h-12 a6 6 0 0 1 -6 -6z" fill="#3B93FF" stroke="#1D1A3F" stroke-width="4"/><path d="M10 -6 h5 a6 6 0 0 1 0 12 h-5" fill="none" stroke="#1D1A3F" stroke-width="4"/></g><rect x="96" y="170" width="40" height="8" rx="4" fill="#D6D8EA"/></g><g class="pc"><rect x="164" y="90" width="72" height="102" rx="14" fill="#FFF1CC" stroke="#1D1A3F" stroke-width="4"/><g transform="translate(200 134)"><circle r="10" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="4"/><path d="M15.0 0.0 L21.0 0.0" stroke="#1D1A3F" stroke-width="4"/><path d="M-15.0 0.0 L-21.0 0.0" stroke="#1D1A3F" stroke-width="4"/><path d="M0.0 15.0 L0.0 21.0" stroke="#1D1A3F" stroke-width="4"/><path d="M0.0 -15.0 L0.0 -21.0" stroke="#1D1A3F" stroke-width="4"/><path d="M10.5 10.5 L14.7 14.7" stroke="#1D1A3F" stroke-width="4"/><path d="M-10.5 10.5 L-14.7 14.7" stroke="#1D1A3F" stroke-width="4"/><path d="M10.5 -10.5 L14.7 -14.7" stroke="#1D1A3F" stroke-width="4"/><path d="M-10.5 -10.5 L-14.7 -14.7" stroke="#1D1A3F" stroke-width="4"/></g><rect x="180" y="170" width="40" height="8" rx="4" fill="#D6D8EA"/></g><g class="pc"><rect x="248" y="90" width="72" height="102" rx="14" fill="#FFE0DC" stroke="#1D1A3F" stroke-width="4"/><g transform="translate(284 134)"><path d="M-16 2 L0 -14 L16 2 V18 H-16Z" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="4"/><rect x="-4" y="6" width="8" height="12" fill="#1D1A3F"/></g><rect x="264" y="170" width="40" height="8" rx="4" fill="#D6D8EA"/></g><g class="pc"><rect x="80" y="208" width="72" height="102" rx="14" fill="#FFE0DC" stroke="#1D1A3F" stroke-width="4"/><g transform="translate(116 252)"><path d="M0 14 C-18 2 -18 -14 -8 -15 C-3 -16 0 -11 0 -8 C0 -11 3 -16 8 -15 C18 -14 18 2 0 14Z" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="4"/></g><rect x="96" y="288" width="40" height="8" rx="4" fill="#D6D8EA"/></g><g class="pc"><rect x="164" y="208" width="72" height="102" rx="14" fill="#D3F2E5" stroke="#1D1A3F" stroke-width="4"/><g transform="translate(200 252)"><circle r="15" fill="#22B97F" stroke="#1D1A3F" stroke-width="4"/><path d="M-15 0 h30 M0 -15 v30" stroke="#1D1A3F" stroke-width="3"/></g><rect x="180" y="288" width="40" height="8" rx="4" fill="#D6D8EA"/></g><g class="pc"><rect x="248" y="208" width="72" height="102" rx="14" fill="#E7E0FF" stroke="#1D1A3F" stroke-width="4"/><g transform="translate(284 252)"><circle r="15" fill="#8A6BFF" stroke="#1D1A3F" stroke-width="4"/><path d="M-7 0 l5 6 l9 -11" fill="none" stroke="#fff" stroke-width="4"/></g><rect x="264" y="288" width="40" height="8" rx="4" fill="#D6D8EA"/></g><g class="tap" transform="translate(330 330)"><circle class="ring" r="26" fill="none" stroke="#3B93FF" stroke-width="5"/><circle r="15" fill="#1D1A3F" fill-opacity=".85" stroke="#fff" stroke-width="4"/></g></svg></div></figure>
+     </div>
+     <div class="col grow1" style="gap:30px">
+      <div>
+       <h2 class="split" style="font-size:62px">A fala não é o único caminho</h2>
+       <p class="body in" style="margin-top:14px;color:var(--ink-soft)">Apoio visual e <strong>comunicação aumentativa e alternativa (CAA)</strong> ampliam as formas de expressão.</p>
+      </div>
+      <div class="adapt" data-step="1">
+       <h3 class="in">Na escola e no trabalho</h3>
+       <ul>
+        <li class="in"><span class="tick k-coral"><svg viewBox="0 0 30 30"><path d="M6 15 l6 6 l12 -13" fill="none" stroke="#1D1A3F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>instruções claras</li>
+        <li class="in"><span class="tick k-leaf"><svg viewBox="0 0 30 30"><path d="M6 15 l6 6 l12 -13" fill="none" stroke="#1D1A3F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>previsibilidade das atividades</li>
+        <li class="in"><span class="tick k-sky"><svg viewBox="0 0 30 30"><path d="M6 15 l6 6 l12 -13" fill="none" stroke="#1D1A3F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>organização visual da rotina</li>
+        <li class="in"><span class="tick k-grape"><svg viewBox="0 0 30 30"><path d="M6 15 l6 6 l12 -13" fill="none" stroke="#1D1A3F" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>ajustes sensoriais</li>
+       </ul>
+       <p class="small in">Avaliar continuamente se as estratégias contribuem para os objetivos.</p>
+      </div>
+     </div>
+    </div>
+   </section>
+
+   <!-- 19 · PRINCÍPIOS -->
+   <section class="slide" data-c="leaf" data-title="2.8 Princípios" aria-label="Princípios do cuidado">
+    <div class="head">
+     <div class="eyebrow in"><span class="num">2.8</span>Princípios do cuidado</div>
+     <h2 class="split">Evidência e respeito, juntos</h2>
+    </div>
+    <div class="tiles">
+     <div class="tile in"><div class="letter k-sky">1</div><div><h3>Baseadas em evidências</h3><p>Intervenções comportamentais e desenvolvimentais adaptadas ao perfil individual</p></div></div>
+     <div class="tile in"><div class="letter k-coral">2</div><div><h3>Segurança e respeito</h3><p>Evitar práticas coercitivas, humilhantes ou voltadas só à supressão de comportamentos inofensivos</p></div></div>
+     <div class="tile in"><div class="letter k-sun">3</div><div><h3>Medicamentos</h3><p>Não tratam as características centrais; podem ser indicados para condições concomitantes ou sintomas específicos</p></div></div>
+     <div class="tile in"><div class="letter k-grape" style="color:var(--white)">4</div><div><h3>Reavaliação contínua</h3><p>Revisar objetivos e apoios conforme as necessidades mudam ao longo da vida</p></div></div>
+    </div>
+    <div class="callout" data-step="1"><div class="ic">★</div><div class="in">Cuidado efetivo depende de práticas fundamentadas, articulação entre serviços e <strong>respeito à dignidade e aos direitos</strong> da pessoa autista. <span class="src">(NICE, 2021)</span></div></div>
+   </section>
+
+   <!-- 20 · CONCLUSÃO -->
+   <section class="slide" data-c="coral" data-title="Conclusão" aria-label="Conclusão">
+    <div class="row">
+     <div class="col grow1">
+      <div class="eyebrow solo in">Conclusão</div>
+      <h2 class="split">Avaliar bem é reconhecer a <span class="hl" style="--hl:var(--coral)">singularidade</span> de cada pessoa</h2>
+      <div class="points">
+       <div class="point" data-step="1"><span class="dot k-sun"></span><span class="in">A avaliação integra história, entrevistas, observação, instrumentos e diferentes contextos.</span></div>
+       <div class="point" data-step="2"><span class="dot k-sky"></span><span class="in">Diagnóstico diferencial e níveis de suporte só fazem sentido junto às habilidades, preferências e ao ambiente.</span></div>
+       <div class="point" data-step="3"><span class="dot k-leaf"></span><span class="in">Intervenções individualizadas, baseadas em evidências e reavaliadas, com a participação da pessoa autista, ampliam autonomia e qualidade de vida.</span></div>
+      </div>
+     </div>
+     <div style="width:470px" class="in">
+      <figure class="slot art"><div class="frame"><svg class="scene" data-scene="net" viewBox="0 0 400 400" role="img" aria-label="Rede de apoio com pessoas conectadas a um coração" stroke-linejoin="round" stroke-linecap="round"><g fill="none" stroke="#1D1A3F" stroke-width="5"><path class="draw" d="M200 65 L317 132 L317 268 L200 335 L83 268 L83 132 Z"/><path class="draw" d="M200 200 L200 65"/><path class="draw" d="M200 200 L317 132"/><path class="draw" d="M200 200 L317 268"/><path class="draw" d="M200 200 L200 335"/><path class="draw" d="M200 200 L83 268"/><path class="draw" d="M200 200 L83 132"/></g><g class="nd" transform="translate(200 65)"><circle r="30" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="5"/><circle cx="-8.32" cy="-2" r="2.9" fill="#1D1A3F"/><circle cx="8.32" cy="-2" r="2.9" fill="#1D1A3F"/><path d="M-8.32 9.1 q8.32 7.3 16.6 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g><g class="nd" transform="translate(317 132)"><circle r="30" fill="#FFBE2E" stroke="#1D1A3F" stroke-width="5"/><circle cx="-8.32" cy="-2" r="2.9" fill="#1D1A3F"/><circle cx="8.32" cy="-2" r="2.9" fill="#1D1A3F"/><path d="M-8.32 9.1 q8.32 7.3 16.6 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g><g class="nd" transform="translate(317 268)"><circle r="30" fill="#22B97F" stroke="#1D1A3F" stroke-width="5"/><circle cx="-8.32" cy="-2" r="2.9" fill="#1D1A3F"/><circle cx="8.32" cy="-2" r="2.9" fill="#1D1A3F"/><path d="M-8.32 9.1 q8.32 7.3 16.6 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g><g class="nd" transform="translate(200 335)"><circle r="30" fill="#3B93FF" stroke="#1D1A3F" stroke-width="5"/><circle cx="-8.32" cy="-2" r="2.9" fill="#1D1A3F"/><circle cx="8.32" cy="-2" r="2.9" fill="#1D1A3F"/><path d="M-8.32 9.1 q8.32 7.3 16.6 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g><g class="nd" transform="translate(83 268)"><circle r="30" fill="#8A6BFF" stroke="#1D1A3F" stroke-width="5"/><circle cx="-8.32" cy="-2" r="2.9" fill="#1D1A3F"/><circle cx="8.32" cy="-2" r="2.9" fill="#1D1A3F"/><path d="M-8.32 9.1 q8.32 7.3 16.6 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g><g class="nd" transform="translate(83 132)"><circle r="30" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="5"/><circle cx="-8.32" cy="-2" r="2.9" fill="#1D1A3F"/><circle cx="8.32" cy="-2" r="2.9" fill="#1D1A3F"/><path d="M-8.32 9.1 q8.32 7.3 16.6 0" fill="none" stroke="#1D1A3F" stroke-width="3"/></g><g transform="translate(200 200)"><path class="hrt" d="M0 30 C-40 6 -40 -30 -18 -32 C-8 -33 0 -24 0 -18 C0 -24 8 -33 18 -32 C40 -30 40 6 0 30Z" fill="#FF6A5C" stroke="#1D1A3F" stroke-width="5"/></g></svg></div></figure>
+     </div>
+    </div>
+   </section>
+
+   <!-- 21 · REFERÊNCIAS -->
+   <section class="slide" data-c="sky" data-title="Referências" aria-label="Referências">
+    <div class="eyebrow solo in">Referências</div>
+    <div class="refs">
+     <p class="in k-coral">AMERICAN PSYCHIATRIC ASSOCIATION. <i>Diagnostic and Statistical Manual of Mental Disorders: DSM-5-TR</i>. 5. ed., text rev. Washington, DC: American Psychiatric Association Publishing, 2022.</p>
+     <p class="in k-sun">BRASIL. Ministério da Saúde. Secretaria de Atenção Primária à Saúde. <i>Linha de cuidado para pessoas com Transtorno do Espectro Autista (TEA)</i>. Brasília, DF: Ministério da Saúde, 2025.</p>
+     <p class="in k-leaf">CENTERS FOR DISEASE CONTROL AND PREVENTION (CDC). <i>Clinical Testing and Diagnosis for Autism Spectrum Disorder</i>. Atlanta: CDC, 2025. Disponível em: cdc.gov/autism/hcp/diagnosis/index.html. Acesso em: 26 out. 2026.</p>
+     <p class="in k-sky">NATIONAL INSTITUTE FOR HEALTH AND CARE EXCELLENCE (NICE). <i>Autism spectrum disorder in adults: diagnosis and management</i>. London: NICE, 2021. Disponível em: nice.org.uk/guidance/cg142. Acesso em: 26 out. 2026.</p>
+     <p class="in k-grape">WORLD HEALTH ORGANIZATION (WHO). <i>Clinical descriptions and diagnostic requirements for ICD-11 mental, behavioural and neurodevelopmental disorders (CDDR)</i>. Geneva: WHO, 2024. Disponível em: who.int/publications/i/item/9789240077263. Acesso em: 26 out. 2026.</p>
+    </div>
+   </section>
+
+   <!-- 22 · ENCERRAMENTO -->
+   <section class="slide end" data-c="grape" data-title="Encerramento" aria-label="Encerramento">
+    <svg class="inf in" viewBox="0 0 240 120" aria-hidden="true" style="filter:drop-shadow(8px 8px 0 #1D1A3F)"><defs><linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#FF6A5C"/><stop offset=".25" stop-color="#FFBE2E"/><stop offset=".5" stop-color="#22B97F"/><stop offset=".75" stop-color="#3B93FF"/><stop offset="1" stop-color="#8A6BFF"/></linearGradient></defs><path class="draw" d="M120 60 C150 18 218 18 218 60 C218 102 150 102 120 60 C90 18 22 18 22 60 C22 102 90 102 120 60 Z" fill="none" stroke="url(#g2)" stroke-width="18" stroke-linecap="round"/></svg>
+    <h1 class="split">Obrigado pela atenção!</h1>
+    <p class="lead in" style="max-width:none">Perguntas e conversa são bem-vindas.</p>
+    <p class="small in">Leiliane · Milena · Neriglissor · Raquel · Rosa Maria · Psicologia · Anhanguera Paragominas · 2026</p>
+   </section>
+
+   <div class="foot l" id="footL"></div>
+   <div class="dots" id="dots"></div>
+   <div class="foot r" id="footR"></div>
+   <div class="iris" id="iris" aria-hidden="true"></div>
+   <div class="blackout" id="black" hidden><svg viewBox="0 0 240 120" aria-hidden="true"><path d="M120 60 C150 18 218 18 218 60 C218 102 150 102 120 60 C90 18 22 18 22 60 C22 102 90 102 120 60 Z" fill="none" stroke="#3B93FF" stroke-width="12"/></svg></div>
+  </div>
+ </div>
+</div>
+
+<div class="ctrl" id="ctrl">
+ <button type="button" id="bPrev" aria-label="Voltar">←</button>
+ <button type="button" id="bNext" aria-label="Avançar">→</button>
+ <button type="button" id="bCalm" aria-pressed="false" title="Menos movimento (M)">Modo calmo</button>
+ <button type="button" id="bFull" title="Tela cheia (F)">Tela cheia</button>
+</div>
+<div class="hint" id="hint"><kbd>→</kbd> ou passador avança · <kbd>F</kbd> tela cheia · <kbd>M</kbd> modo calmo · <kbd>B</kbd> pausa</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function(){
+  const G = window.gsap;
+  const stage = document.getElementById('stage');
+  const wrap = document.getElementById('wrap');
+  const slides = [...stage.querySelectorAll('.slide')];
+  const N = slides.length;
+  const COLORS = {coral:'#FF6A5C',sun:'#FFBE2E',leaf:'#22B97F',sky:'#3B93FF',grape:'#8A6BFF'};
+  let idx = 0, step = 0, busy = false, scale = .5;
+
+  let calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  try { const s = localStorage.getItem('tea-calm'); if (s !== null) calm = s === '1'; } catch(e){}
+
+  /* ---- encaixe do palco ---- */
+  function fit(){
+    const s = Math.min(wrap.clientWidth/1920, wrap.clientHeight/1080);
+    scale = s;
+    stage.style.transform = `translate(-50%,-50%) scale(${s})`;
+  }
+  addEventListener('resize', fit); fit();
+
+  /* ---- divisão das palavras dos títulos ---- */
+  function split(el){
+    (function walk(node){
+      [...node.childNodes].forEach(ch=>{
+        if (ch.nodeType === 3){
+          const frag = document.createDocumentFragment();
+          ch.textContent.split(/(\s+)/).forEach(p=>{
+            if (!p) return;
+            if (/^\s+$/.test(p)) frag.appendChild(document.createTextNode(' '));
+            else { const s = document.createElement('span'); s.className = 'w'; s.textContent = p; frag.appendChild(s); }
+          });
+          ch.replaceWith(frag);
+        } else if (ch.nodeType === 1) walk(ch);
+      });
+    })(el);
+  }
+  stage.querySelectorAll('.split').forEach(split);
+
+  /* ---- formas do fundo ---- */
+  const SH = [
+    '<circle cx="50" cy="50" r="44" fill="@@" stroke="#1D1A3F" stroke-width="5"/>',
+    '<circle cx="50" cy="50" r="36" fill="none" stroke="@@" stroke-width="16"/>',
+    '<path d="M6 64 A44 44 0 0 1 94 64 Z" fill="@@" stroke="#1D1A3F" stroke-width="5" stroke-linejoin="round"/>',
+    '<path d="M6 50 Q20 22 34 50 T62 50 T94 50" fill="none" stroke="@@" stroke-width="13" stroke-linecap="round"/>',
+    '<path d="M50 4 C56 38 62 44 96 50 C62 56 56 62 50 96 C44 62 38 56 4 50 C38 44 44 38 50 4Z" fill="@@" stroke="#1D1A3F" stroke-width="5" stroke-linejoin="round"/>',
+    '<rect x="6" y="32" width="88" height="36" rx="18" fill="@@" stroke="#1D1A3F" stroke-width="5"/>',
+    '<path d="M50 10 L90 84 H10 Z" fill="@@" stroke="#1D1A3F" stroke-width="5" stroke-linejoin="round"/>',
+    '<g fill="@@"><circle cx="20" cy="20" r="9"/><circle cx="50" cy="20" r="9"/><circle cx="80" cy="20" r="9"/><circle cx="20" cy="50" r="9"/><circle cx="50" cy="50" r="9"/><circle cx="80" cy="50" r="9"/><circle cx="20" cy="80" r="9"/><circle cx="50" cy="80" r="9"/><circle cx="80" cy="80" r="9"/></g>'
+  ];
+  const palette = Object.values(COLORS);
+  const bg = document.getElementById('bg');
+  const shapes = [];
+  for (let i=0;i<14;i++){
+    const d = document.createElement('div'); d.className = 'shape';
+    const size = [70,110,90,130,64,100,84,120][i%8];
+    d.style.width = d.style.height = size+'px';
+    d.innerHTML = `<div class="fl"><svg viewBox="0 0 100 100">${SH[i%SH.length].replace(/@@/g, palette[(i*3)%5])}</svg></div>`;
+    bg.appendChild(d); shapes.push({el:d, size, fl:d.firstChild});
+  }
+  function rng(seed){ return function(){ seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed>>>15, 1|seed); t = t + Math.imul(t ^ t>>>7, 61|t) ^ t; return ((t ^ t>>>14)>>>0)/4294967296; }; }
+  function layout(n, animate){
+    const r = rng(n*977+13);
+    const lerp=(a,b)=>a+(b-a)*r();
+    shapes.forEach((s,i)=>{
+      const w = s.size, z = r(); let x,y;
+      if (z < .3){ x = lerp(-w*.55, 140-w); y = lerp(40, 1080-w-60); }
+      else if (z < .6){ x = lerp(1780, 1920-w*.45); y = lerp(40, 1080-w-60); }
+      else if (z < .82){ x = lerp(120, 1800-w); y = lerp(-w*.55, 92-w); }
+      else { x = lerp(120, 1800-w); y = lerp(1080-80, 1080-w*.4); }
+      const props = {x, y, rotation: lerp(-40,40), scale: lerp(.8,1.15)};
+      if (G && animate && !calm) G.to(s.el, {...props, duration:1.1, ease:'back.out(1.5)', delay:i*.025});
+      else if (G) G.set(s.el, props);
+      else s.el.style.transform = `translate(${x}px,${y}px) rotate(${props.rotation}deg)`;
+    });
+  }
+  const floats = G ? shapes.map(s=> G.to(s.fl, {y:'+=14', rotation:'+=10', duration:2.6+Math.random()*1.8, yoyo:true, repeat:-1, ease:'sine.inOut'})) : [];
+
+  /* ---- cenas vetoriais animadas ---- */
+  const loops = [], hooks = {};
+  const L = (t, rest=0)=>{ t.rest = rest; loops.push(t); return t; };
+  const q = (sc, sel)=> [...stage.querySelectorAll(`.scene[data-scene="${sc}"] ${sel}`)];
+  if (G){
+    { const ch = q('cover','.ch'), mv = q('cover','.mv'), shd = q('cover','.shd');
+      /* círculo: pula */
+      L(G.to(mv[0], {y:-46, duration:.42, ease:'power2.out', yoyo:true, repeat:-1, repeatDelay:.2}));
+      L(G.to(shd[0], {scale:.6, opacity:.5, transformOrigin:'50% 50%', duration:.42, ease:'power2.out', yoyo:true, repeat:-1, repeatDelay:.2}));
+      /* quadrado: amassa e estica */
+      L(G.to(mv[1], {keyframes:[{scaleY:.74, scaleX:1.18, duration:.22},{scaleY:1.12, scaleX:.92, duration:.2},{scaleY:1, scaleX:1, duration:.35, ease:'elastic.out(1,.4)'}], transformOrigin:'50% 100%', repeat:-1, repeatDelay:.9}));
+      /* triângulo: balança como pêndulo */
+      L(G.fromTo(mv[2], {rotation:-12}, {rotation:12, svgOrigin:'200 322', duration:.7, ease:'sine.inOut', yoyo:true, repeat:-1}), .35);
+      /* estrela: gira */
+      L(G.to(mv[3], {rotation:360, transformOrigin:'50% 50%', duration:1.3, ease:'back.inOut(1.6)', repeat:-1, repeatDelay:1.2}));
+      /* pílula: respira, crescendo e diminuindo */
+      L(G.to(mv[4], {scaleY:1.14, scaleX:.94, transformOrigin:'50% 100%', duration:.8, ease:'sine.inOut', yoyo:true, repeat:-1}));
+      hooks.cover = ()=>{
+        G.fromTo(ch, {scale:0, transformOrigin:'50% 100%'}, {scale:1, duration:.7, ease:'back.out(2.4)', stagger:.12, delay:.5});
+        G.fromTo(shd, {scaleX:0, transformOrigin:'50% 50%'}, {scaleX:1, duration:.5, stagger:.12, delay:.5});
+      };
+    }
+
+    { const b = q('intro','.blk'), sp = q('intro','.spark');
+      const tl = G.timeline({repeat:-1, repeatDelay:.3});
+      tl.fromTo(b, {y:-340, autoAlpha:1}, {y:0, duration:.8, ease:'bounce.out', stagger:.55})
+        .fromTo(sp, {scale:0, rotation:-90, autoAlpha:1, transformOrigin:'50% 50%'}, {scale:1, rotation:0, duration:.6, ease:'back.out(3)'})
+        .addLabel('rest')
+        .to(sp, {rotation:180, duration:1.6, ease:'sine.inOut'})
+        .to([...b, ...sp], {autoAlpha:0, duration:.35, stagger:.06});
+      L(tl, 'rest'); }
+
+    { const bL = q('comm','.bL'), bR = q('comm','.bR');
+      const tl = G.timeline({repeat:-1});
+      tl.fromTo(bL, {scale:0, svgOrigin:'110 200'}, {scale:1, duration:.5, ease:'back.out(2.2)'})
+        .to(q('comm','.dt'), {y:-10, duration:.22, yoyo:true, repeat:5, stagger:.1, ease:'sine.inOut'})
+        .to(bL, {scale:0, duration:.3, ease:'back.in(2)'}, '+=.2')
+        .fromTo(bR, {scale:0, svgOrigin:'295 220'}, {scale:1, duration:.5, ease:'back.out(2.2)'})
+        .addLabel('rest')
+        .to(q('comm','.hrt'), {scale:1.25, transformOrigin:'50% 50%', duration:.25, yoyo:true, repeat:3})
+        .to(bR, {scale:0, duration:.3, ease:'back.in(2)'}, '+=.3');
+      L(tl, 'rest'); }
+
+    L(G.fromTo(q('sense','.wv'), {opacity:0, scale:.75, transformOrigin:'50% 50%'}, {opacity:1, scale:1.05, duration:.9, ease:'sine.out', stagger:{each:.3, repeat:-1, yoyo:true}}), 1);
+    L(G.to(q('sense','.sunr'), {rotation:360, svgOrigin:'340 62', duration:14, repeat:-1, ease:'none'}));
+    L(G.to(q('sense','.head'), {rotation:3, svgOrigin:'200 400', duration:2.4, yoyo:true, repeat:-1, ease:'sine.inOut'}));
+
+    L(G.to(q('scan','.ball'), {y:-80, duration:.45, yoyo:true, repeat:-1, ease:'power2.out'}));
+    { const mag = q('scan','.mag'); G.set(mag, {x:180, y:160});
+      L(G.to(mag, {keyframes:[{x:250,y:250},{x:310,y:150},{x:150,y:225},{x:180,y:160}], duration:8, repeat:-1, ease:'sine.inOut'})); }
+
+    { const sh = q('eval','.shp');
+      const tl = G.timeline({repeat:-1, repeatDelay:.4});
+      tl.fromTo(sh, {scale:0, transformOrigin:'50% 100%'}, {scale:1, duration:.5, ease:'back.out(2.5)', stagger:.45})
+        .addLabel('rest')
+        .to(q('eval','.nod'), {rotation:6, transformOrigin:'50% 100%', duration:.3, yoyo:true, repeat:3, stagger:.2})
+        .to(sh, {scale:0, duration:.3, stagger:.1, ease:'back.in(2)'}, '+=.6');
+      L(tl, 'rest'); }
+
+    { const cards = q('caa','.pc'), tap = q('caa','.tap'), ring = q('caa','.ring');
+      const C = [[116,140],[200,140],[284,140],[116,258],[200,258],[284,258]];
+      G.set(tap, {x:330, y:330});
+      const tl = G.timeline({repeat:-1});
+      [0,4,2,3].forEach((i,k)=>{
+        tl.to(tap, {x:C[i][0]+14, y:C[i][1]+20, duration:.7, ease:'power2.inOut'})
+          .to(tap, {scale:.8, duration:.12, yoyo:true, repeat:1, transformOrigin:'50% 50%'})
+          .fromTo(ring, {scale:.3, opacity:1, transformOrigin:'50% 50%'}, {scale:1.8, opacity:0, duration:.55}, '<')
+          .to(cards[i], {scale:1.12, transformOrigin:'50% 50%', duration:.2, yoyo:true, repeat:1, ease:'power2.out'}, '<');
+        if (!k) tl.addLabel('rest');
+        tl.to({}, {duration:.45});
+      });
+      tl.to(tap, {x:330, y:330, duration:.6, ease:'power2.inOut'});
+      L(tl, 'rest'); }
+
+    L(G.to(q('net','.nd'), {y:'-=8', duration:1, ease:'sine.inOut', stagger:{each:.2, repeat:-1, yoyo:true}}));
+    L(G.to(q('net','.hrt'), {scale:1.15, transformOrigin:'50% 50%', duration:.45, repeat:-1, yoyo:true, ease:'sine.inOut'}));
+  }
+
+  /* ---- navegação no palco ---- */
+  const dotsEl = document.getElementById('dots');
+  slides.forEach((s,i)=>{
+    const b = document.createElement('button'); b.type='button';
+    b.style.setProperty('--k', COLORS[s.dataset.c]);
+    b.setAttribute('aria-label', `Ir para o slide ${i+1}: ${s.dataset.title}`);
+    b.addEventListener('click', ()=> go(i));
+    dotsEl.appendChild(b);
+  });
+  const footL = document.getElementById('footL'), footR = document.getElementById('footR');
+  function ui(){
+    [...dotsEl.children].forEach((b,i)=>{ b.classList.toggle('on', i===idx); b.classList.toggle('seen', i<idx); });
+    footL.textContent = slides[idx].dataset.title;
+    footR.textContent = String(idx+1).padStart(2,'0')+' / '+N;
+    try { history.replaceState(null,'','#slide-'+(idx+1)); } catch(e){}
+  }
+
+  /* ---- passos e animações ---- */
+  const maxStep = s => Math.max(0, ...[...s.querySelectorAll('[data-step]')].map(e=>+e.dataset.step));
+  const ownStep = el => { const p = el.closest('[data-step]'); return p ? +p.dataset.step : 0; };
+  const pick = (s, sel, n) => [...s.querySelectorAll(sel)].filter(e=> ownStep(e) === n);
+
+  function reveal(s, n, delay=0){
+    if (!G) return;
+    const stepEls = n ? [...s.querySelectorAll(`[data-step="${n}"]`)] : [];
+    let pops = pick(s, '.in', n).filter(e=> !e.matches('[data-step]'));
+    if (n){ G.set(stepEls, {autoAlpha:1}); if (!pops.length) pops = stepEls; }
+    const words = pick(s, '.split .w', n), draws = pick(s, '.draw', n), grows = pick(s, '.grow', n), strikes = pick(s, '.strike', n);
+    if (calm){
+      G.fromTo([...pops, ...words, ...grows], {autoAlpha:0}, {autoAlpha:1, duration:.4, delay});
+      draws.forEach(d=> G.set(d, {clearProps:'strokeDasharray,strokeDashoffset'}));
+      G.set(strikes, {scaleX:1});
+      return;
+    }
+    const tl = G.timeline({delay});
+    if (words.length) tl.fromTo(words, {autoAlpha:0, y:70, rotation:()=>G.utils.random(-8,8)}, {autoAlpha:1, y:0, rotation:0, duration:.75, ease:'back.out(2)', stagger:.045}, 0);
+    if (pops.length) tl.fromTo(pops, {autoAlpha:0, y:46, scale:.9, rotation:()=>G.utils.random(-4,4)}, {autoAlpha:1, y:0, scale:1, rotation:0, duration:.7, ease:'back.out(1.8)', stagger:.07, clearProps:'rotation'}, words.length ? .18 : 0);
+    draws.forEach(d=>{ const L = d.getTotalLength(); tl.fromTo(d, {strokeDasharray:L, strokeDashoffset:L}, {strokeDashoffset:0, duration:1.3, ease:'power2.inOut'}, .2); });
+    if (grows.length) tl.fromTo(grows, {scaleY:0}, {scaleY:1, duration:1, ease:'elastic.out(1,.55)', stagger:.15}, .15);
+    if (strikes.length) tl.fromTo(strikes, {scaleX:0}, {scaleX:1, duration:.6, ease:'power3.out'}, .9);
+  }
+  function hideSteps(s){ if (G) G.set(s.querySelectorAll('[data-step]'), {autoAlpha:0}); }
+  function showSteps(s){ if (G) G.set(s.querySelectorAll('[data-step]'), {autoAlpha:1}); }
+
+  function enter(s, all){
+    if (all){ showSteps(s); step = maxStep(s); reveal(s,0); }
+    else { hideSteps(s); step = 0; reveal(s,0); }
+    s.querySelectorAll('.flip.on').forEach(f=> f.classList.remove('on'));
+    const sc = s.querySelector('.scene');
+    if (sc && hooks[sc.dataset.scene] && !calm) hooks[sc.dataset.scene]();
+  }
+
+  const iris = document.getElementById('iris');
+  /* bolinhas que acompanham a bolha */
+  const bubs = [0,1,2,3,4,5].map(()=>{ const b=document.createElement('i'); iris.appendChild(b); return b; });
+  function dotPos(n){
+    const sr = stage.getBoundingClientRect(), dr = dotsEl.children[n].getBoundingClientRect();
+    return {x:(dr.left+dr.width/2-sr.left)/scale, y:(dr.top+dr.height/2-sr.top)/scale};
+  }
+
+  function go(n, all=false){
+    if (mobile || n < 0 || n >= N || n === idx || busy) return;
+    const from = slides[idx], to = slides[n], dir = n > idx ? 1 : -1;
+    const swap = ()=>{
+      from.classList.remove('active'); to.classList.add('active');
+      idx = n; ui(); layout(n, true); enter(to, all);
+    };
+    if (!G){ swap(); return; }
+    busy = true;
+    if (calm){
+      G.to(from, {autoAlpha:0, duration:.22, onComplete(){
+        G.set(from, {clearProps:'opacity,visibility'});
+        swap();
+        G.fromTo(to, {autoAlpha:0}, {autoAlpha:1, duration:.3, onComplete(){ G.set(to,{clearProps:'opacity,visibility'}); busy=false; }});
+      }});
+      return;
+    }
+    const p = dotPos(n), col = COLORS[to.dataset.c];
+    const st = {r:0, x:p.x, y:p.y};
+    const paint = ()=> iris.style.clipPath = `circle(${st.r}px at ${st.x}px ${st.y}px)`;
+    iris.style.background = col;
+    bubs.forEach((b,i)=>{ const sz = [70,40,90,30,56,44][i]; G.set(b,{width:sz,height:sz,left:G.utils.random(200,1700),top:G.utils.random(150,900),scale:0,y:0}); });
+    G.timeline({onComplete(){ G.set(iris,{visibility:'hidden'}); busy=false; }})
+      .set(iris, {visibility:'visible'})
+      .add(paint)
+      .to(st, {r:2300, duration:.6, ease:'power3.in', onUpdate:paint})
+      .to(bubs, {scale:1, duration:.35, ease:'back.out(3)', stagger:.03}, '-=.2')
+      .add(swap)
+      .set(st, {x:960, y:540})
+      .to(bubs, {scale:0, y:'-=60', duration:.3, ease:'power2.in', stagger:.03}, '+=.05')
+      .to(st, {r:0, duration:.7, ease:'back.in(1.4)', onUpdate:paint}, '<');
+  }
+
+  function nearest(){ let b=0, d=1e9; slides.forEach((s,i)=>{ const t=Math.abs(s.getBoundingClientRect().top); if (t<d){ d=t; b=i; } }); return b; }
+  function next(){
+    if (mobile){ const n = Math.min(N-1, nearest()+1); slides[n].scrollIntoView({behavior: calm?'auto':'smooth'}); return; }
+    if (busy) return;
+    const s = slides[idx];
+    if (step < maxStep(s)){ step++; reveal(s, step); }
+    else go(idx+1);
+  }
+  function prev(){
+    if (mobile){ const n = Math.max(0, nearest()-1); slides[n].scrollIntoView({behavior: calm?'auto':'smooth'}); return; }
+    if (busy) return;
+    const s = slides[idx];
+    if (step > 0){
+      const els = s.querySelectorAll(`[data-step="${step}"]`);
+      if (G) G.to(els, {autoAlpha:0, duration:.2}); step--;
+    } else go(idx-1, true);
+  }
+
+
+  /* ---- modo celular ---- */
+  const mq = matchMedia('(max-width: 899px), (orientation: portrait) and (max-width: 1100px)');
+  let mobile = false, io = null;
+  function revealAll(s){
+    if (s.dataset.done) return; s.dataset.done = '1';
+    showSteps(s); reveal(s, 0);
+    for (let k=1; k<=maxStep(s); k++) reveal(s, k, .12*k);
+    const sc = s.querySelector('.scene');
+    if (sc && hooks[sc.dataset.scene] && !calm) hooks[sc.dataset.scene]();
+  }
+  function applyMode(){
+    const m = mq.matches;
+    if (m === mobile && io !== null) return;
+    mobile = m;
+    document.documentElement.classList.toggle('m', m);
+    document.body.classList.toggle('m', m);
+    if (m){
+      slides.forEach(s=>{ delete s.dataset.done; if (G) G.set(s, {clearProps:'opacity,visibility'}); showSteps(s); });
+      io = new IntersectionObserver(es=> es.forEach(e=>{ if (e.isIntersecting) revealAll(e.target); }), {threshold:.18});
+      slides.forEach(s=> io.observe(s));
+    } else {
+      if (io) { io.disconnect(); }
+      io = false;
+      slides.forEach((s,i)=> s.classList.toggle('active', i===idx));
+      fit(); enter(slides[idx], false);
+    }
+  }
+
+  /* ---- interações ---- */
+  stage.querySelectorAll('.sense').forEach(b=>{
+    const wig = ()=>{ if (G && !calm) G.fromTo(b.querySelector('.ring'), {rotation:0}, {keyframes:{rotation:[-14,12,-8,5,0]}, duration:.7, ease:'power1.out'}); };
+    b.addEventListener('mouseenter', wig); b.addEventListener('click', wig);
+  });
+  stage.querySelectorAll('.flip').forEach(f=> f.addEventListener('click', ()=> f.classList.toggle('on')));
+
+  const black = document.getElementById('black');
+  function toggleFull(){
+    try {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+      else document.exitFullscreen().catch(()=>{});
+    } catch(e){}
+  }
+  const bCalm = document.getElementById('bCalm');
+  function setCalm(v){
+    calm = v; bCalm.setAttribute('aria-pressed', String(v));
+    try { localStorage.setItem('tea-calm', v ? '1':'0'); } catch(e){}
+    floats.forEach(t=> v ? t.pause() : t.resume());
+    loops.forEach(t=> v ? t.pause(t.rest) : t.resume());
+  }
+  setCalm(calm);
+  bCalm.addEventListener('click', ()=> setCalm(!calm));
+  document.getElementById('bFull').addEventListener('click', toggleFull);
+  document.getElementById('bPrev').addEventListener('click', prev);
+  document.getElementById('bNext').addEventListener('click', next);
+
+  addEventListener('keydown', e=>{
+    if (e.target.closest && e.target.closest('.sense,.flip') && (e.key===' '||e.key==='Enter')) return;
+    const k = e.key;
+    if (['ArrowRight','ArrowDown','PageDown',' ','Enter'].includes(k)){ e.preventDefault(); next(); }
+    else if (['ArrowLeft','ArrowUp','PageUp','Backspace'].includes(k)){ e.preventDefault(); prev(); }
+    else if (k==='Home'){ go(0); }
+    else if (k==='End'){ go(N-1, true); }
+    else if (k==='f'||k==='F'){ toggleFull(); }
+    else if (k==='m'||k==='M'){ setCalm(!calm); }
+    else if (k==='b'||k==='B'||k==='.'){ black.hidden = !black.hidden; }
+  });
+
+  /* controles somem quando o mouse para */
+  const ctrl = document.getElementById('ctrl'); let t;
+  const wake = ()=>{ ctrl.classList.remove('idle'); clearTimeout(t); t = setTimeout(()=> ctrl.classList.add('idle'), 2600); };
+  addEventListener('mousemove', wake); wake();
+  setTimeout(()=> document.getElementById('hint').classList.add('gone'), 6000);
+
+  /* ---- início ---- */
+  const m = /^#slide-(\d+)$/.exec(location.hash);
+  const start = m ? Math.min(N, Math.max(1, +m[1])) - 1 : 0;
+  if (start){ slides[0].classList.remove('active'); slides[start].classList.add('active'); idx = start; }
+  ui(); layout(idx, false);
+  const begin = ()=> applyMode();
+  (mq.addEventListener ? mq.addEventListener('change', applyMode) : mq.addListener(applyMode));
+  (document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve()).then(begin);
+})();
+</script>
